@@ -407,6 +407,24 @@
   .access-value { color: var(--text); }
   .access-value a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.25s; }
   .access-value a:hover { border-bottom-color: var(--accent); }
+  .collab-card {
+    margin-top: 1.6rem;
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 6px; padding: 1.4rem 1.5rem;
+    box-shadow: var(--shadow-sm);
+  }
+  .collab-title {
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 600; font-size: 0.98rem;
+    color: var(--ink); margin-bottom: 0.55rem;
+  }
+  .collab-text {
+    font-size: 0.82rem; color: var(--text-light);
+    line-height: 1.9;
+    line-break: strict; overflow-wrap: break-word;
+    text-wrap: pretty;
+    text-align: justify; text-align-last: left; text-justify: inter-character;
+  }
   .access-sns { margin-top: 1.5rem; }
   .access-sns h3 {
     font-family: 'Noto Serif JP', serif;
@@ -1104,6 +1122,13 @@
             <span class="access-value"><a href="mailto:shin.ryota.sp@alumni.tsukuba.ac.jp">shin.ryota.sp@alumni.tsukuba.ac.jp</a></span>
           </div>
         </div>
+        <div class="collab-card">
+          <p class="collab-title">共同研究・ご相談</p>
+          <p class="collab-text">
+            インフラモニタリング、都市データ活用、会計情報学、サービス科学に関連するテーマについて、企業・自治体・研究機関との共同研究や技術的なご相談を歓迎しています。
+            関心のある課題や連携の可能性がありましたら、まずはメールでお気軽にご連絡ください。
+          </p>
+        </div>
         <div class="access-sns">
           <h3>SNS</h3>
           <div class="sns-links">
@@ -1121,6 +1146,7 @@
 <footer>
   <p class="footer-name">SHIN Lab.</p>
   <p>&copy; 2026 秦研究室, 東京理科大学 経営学部 — All rights reserved.</p>
+  <p style="margin-top: 0.45rem; font-size: 0.72rem;">最終更新日: 2026年3月19日</p>
   <p style="margin-top: 0.5rem; font-size: 0.7rem;">
     Illustrations: <a href="https://chojugiga.com/" target="_blank" rel="noopener">鳥獣戯画制作キット</a>
   </p>
