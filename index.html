@@ -217,6 +217,36 @@
   }
 
   #publications { background: var(--paper); }
+  .pub-controls {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 1rem; margin: 1.2rem 0 2.2rem;
+    padding: 1rem 1.1rem;
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 6px;
+  }
+  .pub-filter-status {
+    font-size: 0.8rem; color: var(--text-light);
+    letter-spacing: 0.02em;
+  }
+  .pub-filter-buttons {
+    display: flex; flex-wrap: wrap; gap: 0.55rem;
+  }
+  .pub-filter-button {
+    appearance: none; border: 1px solid var(--border);
+    background: var(--paper); color: var(--text-light);
+    font-size: 0.75rem; font-weight: 600;
+    padding: 0.45rem 0.85rem; border-radius: 999px;
+    cursor: pointer; transition: 0.25s ease;
+  }
+  .pub-filter-button:hover {
+    border-color: var(--accent-light); color: var(--accent);
+    background: var(--blue-bg);
+  }
+  .pub-filter-button.is-active {
+    background: var(--accent); color: var(--white);
+    border-color: var(--accent);
+  }
+  .pub-item-hidden { display: none; }
   .pub-list { list-style: none; }
   .pub-item {
     padding: 1.3rem 0; border-bottom: 1px solid var(--border);
@@ -233,6 +263,18 @@
     color: var(--ink); margin-bottom: 0.25rem; line-height: 1.6;
   }
   .pub-authors { font-size: 0.78rem; color: var(--text-light); margin-bottom: 0.15rem; }
+  .pub-tags {
+    display: flex; flex-wrap: wrap; gap: 0.38rem;
+    margin: 0.4rem 0 0.45rem;
+  }
+  .pub-tag {
+    display: inline-flex; align-items: center;
+    font-size: 0.66rem; font-weight: 600;
+    color: var(--accent-mid); background: var(--blue-bg);
+    border: 1px solid rgba(43, 82, 128, 0.12);
+    padding: 0.16rem 0.48rem; border-radius: 999px;
+    letter-spacing: 0.02em;
+  }
   .pub-venue { font-size: 0.76rem; font-style: italic; color: var(--text-muted); }
   .pub-doi {
     font-size: 0.73rem; margin-top: 0.2rem;
@@ -394,6 +436,10 @@
     .faculty-card { grid-template-columns: 1fr; }
     .faculty-photo { width: 140px; height: 170px; }
     .access-grid { grid-template-columns: 1fr; }
+    .pub-controls {
+      flex-direction: column; align-items: flex-start;
+      margin-bottom: 1.8rem;
+    }
     .pub-item, .news-item { grid-template-columns: 1fr; gap: 0.2rem; }
     .nav-logo span { display: none; }
   }
@@ -424,15 +470,18 @@
   <h1>SHIN Lab.</h1>
   <p class="hero-sub">秦研究室 — 東京理科大学 経営学部 経営学科</p>
   <p class="hero-desc">
-    秦研究室では、ソーシャルデータサイエンス・スマートシティに関する研究を行っています。
-    社会インフラの維持管理から会計データ分析まで、データ駆動型アプローチで社会課題の解決に取り組んでいます。
+    秦研究室では、スマートシティとソーシャルデータサイエンスを二本柱として研究を行っています。
+    都市・インフラ、会計、コミュニティ、サービスにまたがる社会課題に対して、データ駆動型アプローチで取り組んでいます。
   </p>
   <div class="hero-keywords">
-    <span class="hero-kw">ソーシャルデータサイエンス</span>
     <span class="hero-kw">スマートシティ</span>
-    <span class="hero-kw">構造ヘルスモニタリング</span>
-    <span class="hero-kw">会計学</span>
-    <span class="hero-kw">サービス工学</span>
+    <span class="hero-kw">ソーシャルデータサイエンス</span>
+    <span class="hero-kw">インフラモニタリング</span>
+    <span class="hero-kw">都市データ活用</span>
+    <span class="hero-kw">AI・計算手法</span>
+    <span class="hero-kw">会計情報学</span>
+    <span class="hero-kw">コミュニティ包摂性評価</span>
+    <span class="hero-kw">サービス科学</span>
   </div>
   <hr class="hero-rule">
 </section>
@@ -460,7 +509,7 @@
         </div>
         <div class="faculty-row">
           <span class="faculty-label">専門</span>
-          <span class="faculty-value">ソーシャルデータサイエンス、スマートシティ、会計学、構造ヘルスモニタリング</span>
+          <span class="faculty-value">スマートシティ、ソーシャルデータサイエンス、会計情報学、インフラモニタリング</span>
         </div>
         <div class="faculty-row">
           <span class="faculty-label">E-mail</span>
@@ -481,37 +530,28 @@
     <p class="section-label">Research</p>
     <h2 class="section-title">研究テーマ</h2>
     <p class="section-intro">
-      データサイエンスの手法を駆使して、社会インフラの健全性評価から会計不正検知まで、幅広い領域で研究を推進しています。
+      研究テーマは「スマートシティ」と「ソーシャルデータサイエンス」の二本柱で構成されています。
+      各柱の中で、研究業績に沿って研究分野を整理し、方法論と応用先の対応関係が見えやすい構成にしています。
     </p>
     <div class="research-grid">
       <div class="research-card">
         <p class="card-number">THEME 01</p>
-        <h3>ドライブバイモニタリング</h3>
-        <p>走行車両に搭載したセンサを用いて、道路橋の健全性を間接的に評価する技術の開発。車両・橋梁相互作用（VBI）システム同定手法による効率的なインフラ点検を目指しています。</p>
+        <h3>スマートシティ</h3>
+        <p>都市・インフラの運営を支えるデータ活用を主題とし、センシング、データ分析、計算手法を組み合わせた研究を進めています。Drive-by Monitoring を中心とするインフラモニタリング、公共・都市データ活用、生成AIを含む AI・計算手法の応用を通じて、インフラ運営と都市サービスの高度化を目指しています。</p>
         <div class="card-tags">
-          <span class="card-tag">構造ヘルスモニタリング</span>
-          <span class="card-tag">VBI</span>
-          <span class="card-tag">橋梁診断</span>
+          <span class="card-tag">インフラモニタリング</span>
+          <span class="card-tag">都市データ活用</span>
+          <span class="card-tag">AI・計算手法</span>
         </div>
       </div>
       <div class="research-card">
         <p class="card-number">THEME 02</p>
         <h3>ソーシャルデータサイエンス</h3>
-        <p>社会データの分析を通じて、都市・地域の課題解決に貢献する研究。自治体財政の可視化やサービスレベル評価など、データ駆動型の政策立案を支援します。</p>
+        <p>社会・組織・地域に関するデータを分析し、制度設計や実務改善につなげる研究です。会計情報学を基盤に、寛容性・自律性・well-being を捉えるコミュニティ包摂性評価、サービス科学を軸として、組織・地域・利用者に関わる社会課題をデータから読み解く研究へ展開しています。</p>
         <div class="card-tags">
-          <span class="card-tag">スマートシティ</span>
-          <span class="card-tag">社会システム</span>
-          <span class="card-tag">データ分析</span>
-        </div>
-      </div>
-      <div class="research-card">
-        <p class="card-number">THEME 03</p>
-        <h3>会計データ分析・不正検知</h3>
-        <p>財務諸表データやテキストマイニングを用いた会計不正検知、VAEによる合成仕訳データ生成など、AIを活用した会計分野の研究に取り組んでいます。</p>
-        <div class="card-tags">
-          <span class="card-tag">会計学</span>
-          <span class="card-tag">テキストマイニング</span>
-          <span class="card-tag">異常検知</span>
+          <span class="card-tag">会計情報学</span>
+          <span class="card-tag">コミュニティ包摂性評価</span>
+          <span class="card-tag">サービス科学</span>
         </div>
       </div>
     </div>
@@ -522,6 +562,14 @@
   <div class="section-inner reveal">
     <p class="section-label">Publications</p>
     <h2 class="section-title">業績</h2>
+    <div class="pub-controls" id="pubControls" hidden>
+      <p class="pub-filter-status" id="pubFilterStatus"></p>
+      <div class="pub-filter-buttons" role="group" aria-label="業績の表示範囲">
+        <button class="pub-filter-button is-active" type="button" data-range="3" aria-pressed="true">直近3年</button>
+        <button class="pub-filter-button" type="button" data-range="5" aria-pressed="false">直近5年</button>
+        <button class="pub-filter-button" type="button" data-range="all" aria-pressed="false">すべて</button>
+      </div>
+    </div>
 
     <h3 style="font-family:'Noto Serif JP',serif; font-size:1.05rem; color:var(--ink); margin-bottom:1rem; padding-bottom:0.5rem; border-bottom:1px solid var(--border);">査読付きジャーナル論文 / Journal Papers</h3>
     <ul class="pub-list">
@@ -1054,6 +1102,190 @@
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.12 });
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  const publications = document.getElementById('publications');
+  const pubControls = document.getElementById('pubControls');
+  const pubFilterStatus = document.getElementById('pubFilterStatus');
+
+  if (publications && pubControls && pubFilterStatus) {
+    const pubLists = Array.from(publications.querySelectorAll('.pub-list'));
+    const pubItems = pubLists.flatMap((list) => Array.from(list.querySelectorAll('.pub-item')));
+    const pubButtons = Array.from(publications.querySelectorAll('.pub-filter-button'));
+    const publicationTagGroups = {
+      'インフラモニタリング': [
+        'Estimating bridge natural frequencies based on modal analysis of vehicle–bridge synchronized vibration data',
+        'Numerical verification of the drive-by monitoring method for identifying vehicle and bridge mechanical parameters',
+        'Practical application of drive-by monitoring technology to road roughness estimation using buses in service',
+        '複数回走行時の車両振動データを用いたVBIシステム同定の適用性に関する数値的検討',
+        'Discussion on a vehicle–bridge interaction system identification in a field test',
+        'Application of C-LSTM networks to automatic labelling of vehicle dynamic response data for bridges',
+        '移動センシングを用いたシステム同定におけるパラメータ推定精度の数値的検討',
+        'The analysis for the acceleration data of vehicle running on over 100 bridges based on SSMA',
+        'Field study of drive-by monitoring for estimating road unevenness with buses in service operation',
+        'Parametric study of the vehicle-bridge interaction system identification method',
+        'Numerical verification of vehicle-bridge interaction system identification method using 3D models',
+        'The possibility of data integration of drive-by monitoring and direct bridge monitoring',
+        'Applicable schemes for the vehicle-bridge interaction system identification method',
+        'The application of the SVD-FDD hybrid method to bridge mode shape estimation',
+        'The behavior analysis of spatial singular mode angle due to addition of noise to data in an actual bridge experiment',
+        'Numerical studies on bridge inspection using data obtained from sensors on vehicle',
+        'The validation of sensor on-vehicle for evaluation of actual bridges with signal processing',
+        '実測データによる車両橋梁相互作用システム同定法: 松見橋における事例',
+        'トラック隊列走行による車間距離の違いが橋梁振動に及ぼす影響',
+        '損傷前後における鋼製模型橋梁の動的特性の変化に関する実験的検討',
+        '車両振動ベースの橋梁状態推定に及ぼすGPS精度の影響',
+        'データドリブンなインフラ点検に向けたドライブバイモニタリング',
+        '車両・橋梁同時計測のためのGPS時刻同期型振動計測システムの開発',
+        '複数車両を用いるVBIシステム同定のパラメータ更新方法に関する数値的検討',
+        '車両による間接的構造物健全性モニタリングにおける車両速度の数値的検証',
+        'Vehicle-Bridge Interaction System: An extension of 1D to 3D model for bridge design and maintenance',
+        '異なる車両モデルがVBIシステム同定の推定精度に与える影響の数値的検証',
+        '橋梁振動を用いたVBIシステム同定における有効性の数値的検討',
+        '車載センサから得られた3軸加速度データの補正法に関する提案',
+        '移動センシングを用いたシステム同定において計測ノイズが車両パラメータの推定精度に及ぼす影響の数値的検討',
+        '車両振動データから橋梁検出を行うためのGPS情報利用に関する検証'
+      ],
+      '都市データ活用': [
+        'Practical application of drive-by monitoring technology to road roughness estimation using buses in service',
+        'Field study of drive-by monitoring for estimating road unevenness with buses in service operation',
+        'Social Infrastructure Service Level Agreementによる道路インフラのサービス評価',
+        'COFOGによる自治体財政可視化プラットフォーム構築のための事例研究'
+      ],
+      'AI・計算手法': [
+        'Generating synthetic journal-entry data using variational autoencoder',
+        'Estimating bridge natural frequencies based on modal analysis of vehicle–bridge synchronized vibration data',
+        'Numerical verification of the drive-by monitoring method for identifying vehicle and bridge mechanical parameters',
+        '複数回走行時の車両振動データを用いたVBIシステム同定の適用性に関する数値的検討',
+        '財務諸表データを用いた資金ニーズの見過ごしチェックAIの開発',
+        'Application of C-LSTM networks to automatic labelling of vehicle dynamic response data for bridges',
+        'Noise reduced common PCA for high-dimensional low-sample size multi-view data',
+        'The analysis for the acceleration data of vehicle running on over 100 bridges based on SSMA',
+        'Parametric study of the vehicle-bridge interaction system identification method',
+        'Numerical verification of vehicle-bridge interaction system identification method using 3D models',
+        'Applicable schemes for the vehicle-bridge interaction system identification method',
+        'The application of the SVD-FDD hybrid method to bridge mode shape estimation',
+        'The behavior analysis of spatial singular mode angle due to addition of noise to data in an actual bridge experiment',
+        '対話型AIサービスにおける信頼の転換 — 言語スタイル模倣によるシステム信頼から対人信頼への置き換え効果の検証',
+        '2次元Hermite族要素による非線形システムの数値シミュレーション',
+        'Vehicle-Bridge Interaction System: An extension of 1D to 3D model for bridge design and maintenance',
+        '異なる車両モデルがVBIシステム同定の推定精度に与える影響の数値的検証',
+        '非財務情報のテキストマイニングによる会計不正検知',
+        '移動センシングを用いたシステム同定において計測ノイズが車両パラメータの推定精度に及ぼす影響の数値的検討',
+        'データコラボレーション解析のクロスサイロ実験：筑波大学附属病院とつくば市の実データを用いて',
+        'Applications of Bayesian network models in predicting disease onset for health insurance service'
+      ],
+      '会計情報学': [
+        'Generating synthetic journal-entry data using variational autoencoder',
+        '財務諸表データを用いた資金ニーズの見過ごしチェックAIの開発',
+        '非財務情報のテキストマイニングによる会計不正検知',
+        '財務諸表は長期借入金の増加予測に資するのか？'
+      ],
+      'コミュニティ包摂性評価': [
+        'データコラボレーション解析のクロスサイロ実験：筑波大学附属病院とつくば市の実データを用いて',
+        'Applications of Bayesian network models in predicting disease onset for health insurance service'
+      ],
+      'サービス科学': [
+        'Data-driven approaches to detecting misdeliveries in truck logistics using GPS data',
+        '対話型AIサービスにおける信頼の転換 — 言語スタイル模倣によるシステム信頼から対人信頼への置き換え効果の検証',
+        'Social Infrastructure Service Level Agreementによる道路インフラのサービス評価',
+        'Applications of Bayesian network models in predicting disease onset for health insurance service'
+      ]
+    };
+    const publicationTagLookup = new Map();
+    Object.entries(publicationTagGroups).forEach(([tag, titles]) => {
+      titles.forEach((title) => {
+        if (!publicationTagLookup.has(title)) publicationTagLookup.set(title, []);
+        publicationTagLookup.get(title).push(tag);
+      });
+    });
+    const years = [...new Set(
+      pubItems
+        .map((item) => Number.parseInt(item.querySelector('.pub-year')?.textContent ?? '', 10))
+        .filter(Number.isFinite)
+    )].sort((a, b) => b - a);
+
+    pubItems.forEach((item) => {
+      const title = item.querySelector('.pub-title')?.textContent?.trim();
+      const authors = item.querySelector('.pub-authors');
+      if (!title || !authors || item.querySelector('.pub-tags')) return;
+
+      const tags = publicationTagLookup.get(title) ?? [];
+      if (!tags.length) return;
+
+      const tagList = document.createElement('div');
+      tagList.className = 'pub-tags';
+
+      tags.forEach((tag) => {
+        const chip = document.createElement('span');
+        chip.className = 'pub-tag';
+        chip.textContent = tag;
+        tagList.appendChild(chip);
+      });
+
+      authors.insertAdjacentElement('afterend', tagList);
+    });
+
+    const updateSubsectionVisibility = () => {
+      pubLists.forEach((list) => {
+        const hasVisibleItems = Array.from(list.querySelectorAll('.pub-item'))
+          .some((item) => !item.classList.contains('pub-item-hidden'));
+        list.hidden = !hasVisibleItems;
+        const heading = list.previousElementSibling;
+        if (heading?.tagName === 'H3') heading.hidden = !hasVisibleItems;
+      });
+    };
+
+    const describeVisibleRange = (range, visibleYears, visibleCount) => {
+      if (range === 'all') {
+        return `表示中: すべての業績（${visibleCount}件）`;
+      }
+
+      const newestYear = visibleYears[0];
+      const oldestYear = visibleYears[visibleYears.length - 1];
+      const yearLabel = newestYear === oldestYear
+        ? `${newestYear}年`
+        : `${oldestYear}–${newestYear}年`;
+
+      return `表示中: ${yearLabel}の業績（${visibleYears.length}年分・${visibleCount}件）`;
+    };
+
+    const applyPublicationFilter = (range) => {
+      const visibleYears = range === 'all' ? years : years.slice(0, Number(range));
+      const visibleYearSet = new Set(visibleYears);
+      let visibleCount = 0;
+
+      pubItems.forEach((item) => {
+        const itemYear = Number.parseInt(item.querySelector('.pub-year')?.textContent ?? '', 10);
+        const shouldShow = range === 'all' || visibleYearSet.has(itemYear);
+        item.classList.toggle('pub-item-hidden', !shouldShow);
+        if (shouldShow) visibleCount += 1;
+      });
+
+      updateSubsectionVisibility();
+      pubFilterStatus.textContent = describeVisibleRange(range, visibleYears, visibleCount);
+
+      pubButtons.forEach((button) => {
+        const isActive = button.dataset.range === range;
+        button.classList.toggle('is-active', isActive);
+        button.setAttribute('aria-pressed', String(isActive));
+      });
+    };
+
+    if (years.length > 3) {
+      pubControls.hidden = false;
+
+      pubButtons.forEach((button) => {
+        const range = button.dataset.range;
+        if (range !== 'all' && years.length <= Number(range)) {
+          button.hidden = true;
+        }
+
+        button.addEventListener('click', () => applyPublicationFilter(range));
+      });
+
+      applyPublicationFilter('3');
+    }
+  }
 </script>
 </body>
 </html>
