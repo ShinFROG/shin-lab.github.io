@@ -242,6 +242,29 @@
   }
   .pub-more:hover { border-bottom-color: var(--accent); }
 
+  #lectures { background: var(--paper); }
+  .lecture-table {
+    width: 100%; border-collapse: collapse;
+    background: var(--white); border: 1px solid var(--border); border-radius: 6px;
+    overflow: hidden;
+  }
+  .lecture-table th {
+    font-size: 0.78rem; font-weight: 600; color: var(--text-muted);
+    text-align: left; padding: 0.8rem 1.2rem;
+    background: var(--paper-warm); border-bottom: 1px solid var(--border);
+    letter-spacing: 0.04em;
+  }
+  .lecture-table td {
+    font-size: 0.85rem; color: var(--text); padding: 0.75rem 1.2rem;
+    border-bottom: 1px solid var(--border); line-height: 1.7;
+  }
+  .lecture-table tr:last-child td { border-bottom: none; }
+  .lecture-table tr:hover td { background: var(--accent-faint); }
+  .lecture-quarter {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 0.75rem; font-weight: 500; color: var(--gold);
+  }
+
   #news { background: var(--paper-warm); }
   .news-list { list-style: none; }
   .news-item {
@@ -266,7 +289,7 @@
   .news-text a:hover { border-bottom-color: var(--accent); }
 
   #access { background: var(--paper); }
-  .access-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+  .access-grid { display: grid; grid-template-columns: 1fr; gap: 2.5rem; }
   .access-info h3 {
     font-family: 'Noto Serif JP', serif;
     font-weight: 600; font-size: 1rem; color: var(--ink); margin-bottom: 1rem;
@@ -351,6 +374,7 @@
       <li><a href="#faculty">Faculty</a></li>
       <li><a href="#research">Research</a></li>
       <li><a href="#publications">Publications</a></li>
+      <li><a href="#lectures">Lectures</a></li>
       <li><a href="#news">News</a></li>
       <li><a href="#access">Access</a></li>
     </ul>
@@ -383,7 +407,7 @@
     <p class="section-label">Faculty</p>
     <h2 class="section-title">教員紹介</h2>
     <div class="faculty-card">
-      <div class="faculty-photo">Photo</div>
+      <div class="faculty-photo"><img src="shin-photo.jpg" alt="秦 涼太" style="width:100%;height:100%;object-fit:cover;border-radius:4px;"></div>
       <div class="faculty-info">
         <p class="faculty-name">秦 涼太</p>
         <p class="faculty-name-en">Ryota Shin</p>
@@ -533,6 +557,56 @@
   </div>
 </section>
 
+<section id="lectures">
+  <div class="section-inner reveal">
+    <p class="section-label">Lectures</p>
+    <h2 class="section-title">講義科目</h2>
+    <p class="section-intro">東京理科大学における担当科目一覧です。</p>
+    <table class="lecture-table">
+      <thead>
+        <tr>
+          <th>時期</th>
+          <th>科目名</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="lecture-quarter">Q1</span></td>
+          <td>社会インフラと環境１</td>
+        </tr>
+        <tr>
+          <td><span class="lecture-quarter">Q2</span></td>
+          <td>データサイエンス７</td>
+        </tr>
+        <tr>
+          <td><span class="lecture-quarter">Q2</span></td>
+          <td>政策研修プログラムIJ（マレーシア）</td>
+        </tr>
+        <tr>
+          <td><span class="lecture-quarter">Q2</span></td>
+          <td>数学A</td>
+        </tr>
+        <tr>
+          <td><span class="lecture-quarter">Q2</span></td>
+          <td>総合政策基礎演習B1</td>
+        </tr>
+        <tr>
+          <td><span class="lecture-quarter">Q3</span></td>
+          <td>数学B</td>
+        </tr>
+        <tr>
+          <td><span class="lecture-quarter">Q4</span></td>
+          <td>人間と機械D</td>
+        </tr>
+        <tr>
+          <td><span class="lecture-quarter">Q4</span></td>
+          <td>統計学</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
 <section id="news">
   <div class="section-inner reveal">
     <p class="section-label">News</p>
@@ -600,13 +674,6 @@
             <a class="sns-link" href="https://scholar.google.com/citations?user=Cr0DeoUAAAAJ&hl=ja" target="_blank" rel="noopener">Google Scholar</a>
           </div>
         </div>
-      </div>
-      <div class="access-map">
-        <!-- Google Mapsの埋め込みURLを設定してください -->
-        <p style="text-align:center; padding: 2rem;">
-          Google Maps 埋め込み<br>
-          <span style="font-size: 0.75rem; color: var(--text-muted);">iframe の src を実際のURLに差し替え</span>
-        </p>
       </div>
     </div>
   </div>
