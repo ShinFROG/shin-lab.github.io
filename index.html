@@ -108,6 +108,7 @@
   .hero-desc {
     font-size: 0.9rem; color: var(--text-light);
     max-width: 580px; line-height: 2;
+    line-break: strict; overflow-wrap: break-word;
     opacity: 0; animation: fadeUp 0.7s ease 0.6s forwards;
   }
   .hero-keywords {
@@ -118,6 +119,7 @@
     font-size: 0.72rem; font-weight: 500; color: var(--accent);
     background: var(--accent-faint); padding: 0.3rem 0.75rem;
     border-radius: 3px; letter-spacing: 0.02em;
+    white-space: nowrap;
   }
   .hero-rule {
     width: 50px; height: 1.5px; background: var(--gold);
@@ -137,10 +139,12 @@
     font-family: 'Noto Serif JP', serif;
     font-weight: 700; font-size: 1.55rem;
     color: var(--ink); margin-bottom: 0.8rem; line-height: 1.4;
+    line-break: strict; text-wrap: balance;
   }
   .section-intro {
     font-size: 0.88rem; color: var(--text-light);
     max-width: 580px; margin-bottom: 2.5rem; line-height: 1.95;
+    line-break: strict; overflow-wrap: break-word;
   }
 
   #faculty { background: var(--paper); }
@@ -207,13 +211,17 @@
     font-family: 'Noto Serif JP', serif;
     font-weight: 600; font-size: 1.02rem;
     color: var(--ink); margin-bottom: 0.7rem; line-height: 1.55;
+    line-break: strict; text-wrap: balance;
   }
-  .research-card p { font-size: 0.84rem; color: var(--text-light); line-height: 1.85; }
+  .research-card p {
+    font-size: 0.84rem; color: var(--text-light); line-height: 1.85;
+    line-break: strict; overflow-wrap: break-word;
+  }
   .card-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1rem; }
   .card-tag {
     font-size: 0.7rem; font-weight: 500; color: var(--accent);
     background: var(--accent-faint); padding: 0.2rem 0.6rem;
-    border-radius: 3px;
+    border-radius: 3px; white-space: nowrap;
   }
 
   #publications { background: var(--paper); }
@@ -227,6 +235,7 @@
   .pub-filter-status {
     font-size: 0.8rem; color: var(--text-light);
     letter-spacing: 0.02em;
+    line-break: strict; text-wrap: balance;
   }
   .pub-filter-buttons {
     display: flex; flex-wrap: wrap; gap: 0.55rem;
@@ -237,6 +246,7 @@
     font-size: 0.75rem; font-weight: 600;
     padding: 0.45rem 0.85rem; border-radius: 999px;
     cursor: pointer; transition: 0.25s ease;
+    white-space: nowrap;
   }
   .pub-filter-button:hover {
     border-color: var(--accent-light); color: var(--accent);
@@ -261,8 +271,12 @@
     font-family: 'Noto Serif JP', serif;
     font-weight: 600; font-size: 0.9rem;
     color: var(--ink); margin-bottom: 0.25rem; line-height: 1.6;
+    line-break: strict; overflow-wrap: break-word;
   }
-  .pub-authors { font-size: 0.78rem; color: var(--text-light); margin-bottom: 0.15rem; }
+  .pub-authors {
+    font-size: 0.78rem; color: var(--text-light); margin-bottom: 0.15rem;
+    line-break: strict; overflow-wrap: break-word;
+  }
   .pub-tags {
     display: flex; flex-wrap: wrap; gap: 0.38rem;
     margin: 0.4rem 0 0.45rem;
@@ -273,9 +287,12 @@
     color: var(--accent-mid); background: var(--blue-bg);
     border: 1px solid rgba(43, 82, 128, 0.12);
     padding: 0.16rem 0.48rem; border-radius: 999px;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.02em; white-space: nowrap;
   }
-  .pub-venue { font-size: 0.76rem; font-style: italic; color: var(--text-muted); }
+  .pub-venue {
+    font-size: 0.76rem; font-style: italic; color: var(--text-muted);
+    line-break: strict; overflow-wrap: break-word;
+  }
   .pub-doi {
     font-size: 0.73rem; margin-top: 0.2rem;
   }
