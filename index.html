@@ -242,6 +242,31 @@
   }
   .pub-more:hover { border-bottom-color: var(--accent); }
 
+  #funding { background: var(--paper-warm); }
+  .funding-list { list-style: none; }
+  .funding-item {
+    padding: 1.3rem 0; border-bottom: 1px solid var(--border);
+    display: grid; grid-template-columns: 90px 1fr; gap: 1rem; align-items: start;
+  }
+  .funding-item:last-child { border-bottom: none; }
+  .funding-period {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 0.78rem; font-weight: 500; color: var(--gold); padding-top: 0.15rem;
+    line-height: 1.5;
+  }
+  .funding-title {
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 600; font-size: 0.9rem;
+    color: var(--ink); margin-bottom: 0.25rem; line-height: 1.6;
+  }
+  .funding-detail { font-size: 0.78rem; color: var(--text-light); line-height: 1.8; }
+  .funding-role {
+    display: inline-block; font-size: 0.68rem; font-weight: 600;
+    padding: 0.15rem 0.5rem; border-radius: 2px; margin-left: 0.4rem;
+  }
+  .role-pi { background: var(--amber-bg); color: var(--gold); }
+  .role-co { background: var(--blue-bg); color: var(--accent-mid); }
+
   #lectures { background: var(--paper); }
   .lecture-table {
     width: 100%; border-collapse: collapse;
@@ -374,6 +399,7 @@
       <li><a href="#faculty">Faculty</a></li>
       <li><a href="#research">Research</a></li>
       <li><a href="#publications">Publications</a></li>
+      <li><a href="#funding">Funding</a></li>
       <li><a href="#lectures">Lectures</a></li>
       <li><a href="#news">News</a></li>
       <li><a href="#access">Access</a></li>
@@ -663,6 +689,36 @@
   </div>
 </section>
 
+<section id="funding">
+  <div class="section-inner reveal">
+    <p class="section-label">Funding</p>
+    <h2 class="section-title">研究費・外部資金</h2>
+    <ul class="funding-list">
+      <li class="funding-item">
+        <span class="funding-period">2025–2028</span>
+        <div>
+          <p class="funding-title">車載センサデータに基づく橋梁診断技術の実環境実証</p>
+          <p class="funding-detail">
+            日本学術振興会 科学研究費助成事業 基盤研究(B)
+            <span class="funding-role role-co">分担</span>
+          </p>
+          <p class="funding-detail">研究代表者：山本亨輔</p>
+        </div>
+      </li>
+      <li class="funding-item">
+        <span class="funding-period">2022–2024</span>
+        <div>
+          <p class="funding-title">複数車両・複数道路橋・複数計測による車両・橋梁・路面システム同時同定法</p>
+          <p class="funding-detail">
+            日本学術振興会 科学研究費助成事業 特別研究員奨励費
+            <span class="funding-role role-pi">代表</span>
+          </p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
+
 <section id="lectures">
   <div class="section-inner reveal">
     <p class="section-label">Lectures</p>
@@ -722,20 +778,6 @@
     <p class="section-label">News</p>
     <h2 class="section-title">お知らせ・活動報告</h2>
     <ul class="news-list">
-      <li class="news-item">
-        <span class="news-date">2026.03.05</span>
-        <p class="news-text">
-          <span class="news-badge badge-event">発表</span>
-          <a href="http://ja.serviceology.org/events/domestic2026.html" target="_blank" rel="noopener">サービス学会 第14回 国内大会</a>にて「対話型AIサービスにおける信頼の転換 — 言語スタイル模倣によるシステム信頼から対人信頼への置き換え効果の検証」を発表しました。
-        </p>
-      </li>
-      <li class="news-item">
-        <span class="news-date">2025.02.16</span>
-        <p class="news-text">
-          <span class="news-badge badge-event">発表</span>
-          第4回計算社会科学会大会にて「非財務情報のテキストマイニングによる会計不正検知」を発表しました。
-        </p>
-      </li>
       <li class="news-item">
         <span class="news-date">2025.02.03</span>
         <p class="news-text">
