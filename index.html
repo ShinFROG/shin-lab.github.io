@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SHIN Lab. — 秦研究室 | 東京理科大学</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;600&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #141422;
+    --paper: #f6f4f0;
+    --paper-warm: #edeae4;
+    --accent: #1e3a5f;
+    --accent-mid: #2b5280;
+    --accent-light: #4a7ab5;
+    --accent-faint: rgba(30, 58, 95, 0.06);
+    --text: #2a2a38;
+    --text-light: #55556a;
+    --text-muted: #8a8a9e;
+    --border: rgba(20, 20, 34, 0.09);
+    --border-strong: rgba(20, 20, 34, 0.16);
+    --gold: #7a6545;
+    --gold-light: #a08a66;
+    --white: #ffffff;
+    --green: #3a6b4a;
+    --green-bg: #eef4ef;
+    --blue-bg: #edf2f8;
+    --amber-bg: #f8f3ea;
+    --shadow-sm: 0 2px 6px rgba(20,20,34,0.06);
+    --shadow-md: 0 4px 20px rgba(20,20,34,0.07);
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Noto Sans JP', -apple-system, sans-serif;
+    font-weight: 400; color: var(--text);
+    background: var(--paper); line-height: 1.9;
+    -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  }
+
+  header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(246, 244, 240, 0.88);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border); transition: box-shadow 0.3s;
+  }
+  header.scrolled { box-shadow: var(--shadow-sm); }
+
+  nav {
+    max-width: 1060px; margin: 0 auto; padding: 0 2rem;
+    height: 60px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 700; font-size: 1.15rem;
+    color: var(--ink); text-decoration: none; letter-spacing: 0.04em;
+  }
+  .nav-logo span {
+    font-weight: 400; font-size: 0.78rem;
+    color: var(--text-muted); margin-left: 0.6rem;
+  }
+  .nav-links { display: flex; gap: 1.8rem; list-style: none; }
+  .nav-links a {
+    font-size: 0.78rem; font-weight: 500;
+    color: var(--text-light); text-decoration: none;
+    letter-spacing: 0.06em; transition: color 0.25s; position: relative;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: -3px; left: 0;
+    width: 0; height: 1.5px; background: var(--accent); transition: width 0.3s ease;
+  }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-links a:hover::after { width: 100%; }
+
+  .nav-toggle { display: none; background: none; border: none; cursor: pointer; padding: 4px; }
+  .nav-toggle span { display: block; width: 20px; height: 1.5px; background: var(--ink); margin: 5px 0; transition: 0.3s; }
+
+  .hero {
+    padding: 9.5rem 2rem 5rem; max-width: 1060px; margin: 0 auto; position: relative;
+  }
+  .hero::after {
+    content: ''; position: absolute; top: 7rem; right: -40px;
+    width: 320px; height: 320px;
+    background: radial-gradient(circle, rgba(30,58,95,0.035) 0%, transparent 70%);
+    border-radius: 50%; pointer-events: none;
+  }
+  .hero-eyebrow {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.88rem; font-weight: 400; font-style: italic;
+    color: var(--gold); letter-spacing: 0.12em; margin-bottom: 1rem;
+    opacity: 0; animation: fadeUp 0.7s ease 0.15s forwards;
+  }
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 700; font-size: clamp(2.4rem, 5vw, 3.6rem);
+    color: var(--ink); line-height: 1.2; margin-bottom: 0.4rem;
+    opacity: 0; animation: fadeUp 0.7s ease 0.3s forwards;
+  }
+  .hero-sub {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 1.05rem; font-weight: 400;
+    color: var(--text-light); margin-bottom: 1.8rem;
+    opacity: 0; animation: fadeUp 0.7s ease 0.45s forwards;
+  }
+  .hero-desc {
+    font-size: 0.9rem; color: var(--text-light);
+    max-width: 580px; line-height: 2;
+    opacity: 0; animation: fadeUp 0.7s ease 0.6s forwards;
+  }
+  .hero-keywords {
+    display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.6rem;
+    opacity: 0; animation: fadeUp 0.7s ease 0.75s forwards;
+  }
+  .hero-kw {
+    font-size: 0.72rem; font-weight: 500; color: var(--accent);
+    background: var(--accent-faint); padding: 0.3rem 0.75rem;
+    border-radius: 3px; letter-spacing: 0.02em;
+  }
+  .hero-rule {
+    width: 50px; height: 1.5px; background: var(--gold);
+    border: none; margin: 2.5rem 0 0;
+    opacity: 0; animation: fadeUp 0.7s ease 0.9s forwards;
+  }
+
+  section { padding: 4.5rem 2rem; }
+  .section-inner { max-width: 1060px; margin: 0 auto; }
+  .section-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.75rem; font-weight: 600;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 0.5rem;
+  }
+  .section-title {
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 700; font-size: 1.55rem;
+    color: var(--ink); margin-bottom: 0.8rem; line-height: 1.4;
+  }
+  .section-intro {
+    font-size: 0.88rem; color: var(--text-light);
+    max-width: 580px; margin-bottom: 2.5rem; line-height: 1.95;
+  }
+
+  #faculty { background: var(--paper); }
+  .faculty-card {
+    display: grid; grid-template-columns: 200px 1fr;
+    gap: 2.5rem; align-items: start;
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 6px; padding: 2.2rem;
+  }
+  .faculty-photo {
+    width: 200px; height: 240px; background: var(--paper-warm);
+    border-radius: 4px; display: flex; align-items: center; justify-content: center;
+    color: var(--text-muted); font-size: 0.8rem; border: 1px solid var(--border);
+  }
+  .faculty-name {
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 700; font-size: 1.35rem;
+    color: var(--ink); margin-bottom: 0.15rem;
+  }
+  .faculty-name-en {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.95rem; font-weight: 500;
+    color: var(--text-muted); margin-bottom: 1rem;
+  }
+  .faculty-info { font-size: 0.85rem; line-height: 2.1; }
+  .faculty-row { display: grid; grid-template-columns: 90px 1fr; gap: 0.3rem; margin-bottom: 0.2rem; }
+  .faculty-label { font-weight: 500; color: var(--text-muted); font-size: 0.78rem; }
+  .faculty-value { color: var(--text); }
+  .faculty-value a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.25s; }
+  .faculty-value a:hover { border-bottom-color: var(--accent); }
+  .faculty-links { display: flex; gap: 0.7rem; margin-top: 1.2rem; flex-wrap: wrap; }
+  .faculty-link {
+    font-size: 0.75rem; font-weight: 500;
+    color: var(--accent-mid); background: var(--blue-bg);
+    padding: 0.35rem 0.8rem; border-radius: 3px;
+    text-decoration: none; transition: background 0.2s;
+  }
+  .faculty-link:hover { background: #dde8f3; }
+
+  #research { background: var(--paper-warm); }
+  .research-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 1.3rem;
+  }
+  .research-card {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 6px; padding: 2rem 1.8rem;
+    transition: box-shadow 0.35s, border-color 0.35s, transform 0.35s;
+    position: relative; overflow: hidden;
+  }
+  .research-card::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 3px; height: 0; background: var(--accent); transition: height 0.4s ease;
+  }
+  .research-card:hover {
+    box-shadow: var(--shadow-md); border-color: var(--border-strong); transform: translateY(-2px);
+  }
+  .research-card:hover::before { height: 100%; }
+  .research-card .card-number {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 0.7rem; font-weight: 500; color: var(--text-muted);
+    letter-spacing: 0.12em; margin-bottom: 0.8rem;
+  }
+  .research-card h3 {
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 600; font-size: 1.02rem;
+    color: var(--ink); margin-bottom: 0.7rem; line-height: 1.55;
+  }
+  .research-card p { font-size: 0.84rem; color: var(--text-light); line-height: 1.85; }
+  .card-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1rem; }
+  .card-tag {
+    font-size: 0.7rem; font-weight: 500; color: var(--accent);
+    background: var(--accent-faint); padding: 0.2rem 0.6rem;
+    border-radius: 3px;
+  }
+
+  #publications { background: var(--paper); }
+  .pub-list { list-style: none; }
+  .pub-item {
+    padding: 1.3rem 0; border-bottom: 1px solid var(--border);
+    display: grid; grid-template-columns: 64px 1fr; gap: 1rem; align-items: start;
+  }
+  .pub-item:last-child { border-bottom: none; }
+  .pub-year {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 0.85rem; font-weight: 500; color: var(--gold); padding-top: 0.1rem;
+  }
+  .pub-title {
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 600; font-size: 0.9rem;
+    color: var(--ink); margin-bottom: 0.25rem; line-height: 1.6;
+  }
+  .pub-authors { font-size: 0.78rem; color: var(--text-light); margin-bottom: 0.15rem; }
+  .pub-venue { font-size: 0.76rem; font-style: italic; color: var(--text-muted); }
+  .pub-more {
+    display: inline-block; margin-top: 1.5rem;
+    font-size: 0.82rem; font-weight: 500; color: var(--accent);
+    text-decoration: none; border-bottom: 1px solid var(--border);
+    padding-bottom: 2px; transition: border-color 0.25s;
+  }
+  .pub-more:hover { border-bottom-color: var(--accent); }
+
+  #news { background: var(--paper-warm); }
+  .news-list { list-style: none; }
+  .news-item {
+    padding: 1.1rem 0; border-bottom: 1px solid var(--border);
+    display: grid; grid-template-columns: 96px 1fr; gap: 1.2rem; align-items: baseline;
+  }
+  .news-item:last-child { border-bottom: none; }
+  .news-date {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 0.8rem; font-weight: 500; color: var(--text-muted);
+  }
+  .news-badge {
+    display: inline-block; font-size: 0.65rem; font-weight: 600;
+    letter-spacing: 0.05em; padding: 0.13rem 0.5rem;
+    border-radius: 2px; margin-right: 0.5rem; vertical-align: middle;
+  }
+  .badge-info  { background: var(--blue-bg); color: var(--accent-mid); }
+  .badge-event { background: var(--green-bg); color: var(--green); }
+  .badge-paper { background: var(--amber-bg); color: var(--gold); }
+  .news-text { font-size: 0.86rem; color: var(--text); line-height: 1.7; }
+  .news-text a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--border); }
+  .news-text a:hover { border-bottom-color: var(--accent); }
+
+  #access { background: var(--paper); }
+  .access-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+  .access-info h3 {
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 600; font-size: 1rem; color: var(--ink); margin-bottom: 1rem;
+  }
+  .access-row {
+    display: grid; grid-template-columns: 76px 1fr;
+    gap: 0.4rem; margin-bottom: 0.6rem; font-size: 0.85rem;
+  }
+  .access-label { font-weight: 500; color: var(--text-muted); font-size: 0.78rem; }
+  .access-value { color: var(--text); }
+  .access-value a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.25s; }
+  .access-value a:hover { border-bottom-color: var(--accent); }
+  .access-sns { margin-top: 1.5rem; }
+  .access-sns h3 {
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 600; font-size: 1rem; color: var(--ink); margin-bottom: 0.8rem;
+  }
+  .sns-links { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+  .sns-link {
+    font-size: 0.76rem; font-weight: 500;
+    color: var(--text-light); background: var(--white);
+    border: 1px solid var(--border); padding: 0.35rem 0.8rem;
+    border-radius: 3px; text-decoration: none;
+    transition: border-color 0.25s, color 0.25s;
+  }
+  .sns-link:hover { border-color: var(--accent); color: var(--accent); }
+  .access-map {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 6px; overflow: hidden; height: 300px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-muted); font-size: 0.82rem;
+  }
+
+  footer {
+    background: var(--ink); color: rgba(255,255,255,0.45);
+    padding: 2.5rem 2rem; text-align: center;
+    font-size: 0.75rem; letter-spacing: 0.04em;
+  }
+  footer .footer-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.95rem; font-weight: 600;
+    color: rgba(255,255,255,0.75); margin-bottom: 0.4rem; letter-spacing: 0.1em;
+  }
+  footer a { color: rgba(255,255,255,0.55); text-decoration: none; }
+  footer a:hover { color: rgba(255,255,255,0.8); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .reveal {
+    opacity: 0; transform: translateY(18px);
+    transition: opacity 0.65s ease, transform 0.65s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .nav-links.open {
+      display: flex; flex-direction: column;
+      position: absolute; top: 60px; left: 0; right: 0;
+      background: rgba(246,244,240,0.97); backdrop-filter: blur(16px);
+      padding: 1.2rem 2rem; gap: 1rem; border-bottom: 1px solid var(--border);
+    }
+    .nav-toggle { display: block; }
+    .hero { padding: 7.5rem 1.5rem 3.5rem; }
+    section { padding: 3.5rem 1.5rem; }
+    .faculty-card { grid-template-columns: 1fr; }
+    .faculty-photo { width: 140px; height: 170px; }
+    .access-grid { grid-template-columns: 1fr; }
+    .pub-item, .news-item { grid-template-columns: 1fr; gap: 0.2rem; }
+    .nav-logo span { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header id="header">
+  <nav>
+    <a href="#" class="nav-logo">SHIN Lab.<span>東京理科大学 経営学部</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#faculty">Faculty</a></li>
+      <li><a href="#research">Research</a></li>
+      <li><a href="#publications">Publications</a></li>
+      <li><a href="#news">News</a></li>
+      <li><a href="#access">Access</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="メニュー">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+</header>
+
+<section class="hero">
+  <p class="hero-eyebrow">Tokyo University of Science — School of Management</p>
+  <h1>SHIN Lab.</h1>
+  <p class="hero-sub">秦研究室 — 東京理科大学 経営学部 経営学科</p>
+  <p class="hero-desc">
+    秦研究室では、ソーシャルデータサイエンス・スマートシティに関する研究を行っています。
+    社会インフラの維持管理から会計データ分析まで、データ駆動型アプローチで社会課題の解決に取り組んでいます。
+  </p>
+  <div class="hero-keywords">
+    <span class="hero-kw">ソーシャルデータサイエンス</span>
+    <span class="hero-kw">スマートシティ</span>
+    <span class="hero-kw">構造ヘルスモニタリング</span>
+    <span class="hero-kw">会計学</span>
+    <span class="hero-kw">サービス工学</span>
+  </div>
+  <hr class="hero-rule">
+</section>
+
+<section id="faculty">
+  <div class="section-inner reveal">
+    <p class="section-label">Faculty</p>
+    <h2 class="section-title">教員紹介</h2>
+    <div class="faculty-card">
+      <div class="faculty-photo">Photo</div>
+      <div class="faculty-info">
+        <p class="faculty-name">秦 涼太</p>
+        <p class="faculty-name-en">Ryota Shin</p>
+        <div class="faculty-row">
+          <span class="faculty-label">所属</span>
+          <span class="faculty-value">東京理科大学 経営学部 経営学科</span>
+        </div>
+        <div class="faculty-row">
+          <span class="faculty-label">職位</span>
+          <span class="faculty-value">助教</span>
+        </div>
+        <div class="faculty-row">
+          <span class="faculty-label">学位</span>
+          <span class="faculty-value">博士（社会工学）・筑波大学</span>
+        </div>
+        <div class="faculty-row">
+          <span class="faculty-label">専門</span>
+          <span class="faculty-value">ソーシャルデータサイエンス、スマートシティ、会計学、構造ヘルスモニタリング</span>
+        </div>
+        <div class="faculty-row">
+          <span class="faculty-label">E-mail</span>
+          <span class="faculty-value"><a href="mailto:shin.ryota.sp@alumni.tsukuba.ac.jp">shin.ryota.sp@alumni.tsukuba.ac.jp</a></span>
+        </div>
+        <div class="faculty-links">
+          <a class="faculty-link" href="https://researchmap.jp/RyotaShin" target="_blank" rel="noopener">researchmap</a>
+          <a class="faculty-link" href="https://scholar.google.com/citations?user=Cr0DeoUAAAAJ&hl=ja" target="_blank" rel="noopener">Google Scholar</a>
+          <a class="faculty-link" href="https://orcid.org/0000-0002-5502-9025" target="_blank" rel="noopener">ORCID</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="research">
+  <div class="section-inner reveal">
+    <p class="section-label">Research</p>
+    <h2 class="section-title">研究テーマ</h2>
+    <p class="section-intro">
+      データサイエンスの手法を駆使して、社会インフラの健全性評価から会計不正検知まで、幅広い領域で研究を推進しています。
+    </p>
+    <div class="research-grid">
+      <div class="research-card">
+        <p class="card-number">THEME 01</p>
+        <h3>ドライブバイモニタリング</h3>
+        <p>走行車両に搭載したセンサを用いて、道路橋の健全性を間接的に評価する技術の開発。車両・橋梁相互作用（VBI）システム同定手法による効率的なインフラ点検を目指しています。</p>
+        <div class="card-tags">
+          <span class="card-tag">構造ヘルスモニタリング</span>
+          <span class="card-tag">VBI</span>
+          <span class="card-tag">橋梁診断</span>
+        </div>
+      </div>
+      <div class="research-card">
+        <p class="card-number">THEME 02</p>
+        <h3>ソーシャルデータサイエンス</h3>
+        <p>社会データの分析を通じて、都市・地域の課題解決に貢献する研究。自治体財政の可視化やサービスレベル評価など、データ駆動型の政策立案を支援します。</p>
+        <div class="card-tags">
+          <span class="card-tag">スマートシティ</span>
+          <span class="card-tag">社会システム</span>
+          <span class="card-tag">データ分析</span>
+        </div>
+      </div>
+      <div class="research-card">
+        <p class="card-number">THEME 03</p>
+        <h3>会計データ分析・不正検知</h3>
+        <p>財務諸表データやテキストマイニングを用いた会計不正検知、VAEによる合成仕訳データ生成など、AIを活用した会計分野の研究に取り組んでいます。</p>
+        <div class="card-tags">
+          <span class="card-tag">会計学</span>
+          <span class="card-tag">テキストマイニング</span>
+          <span class="card-tag">異常検知</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="publications">
+  <div class="section-inner reveal">
+    <p class="section-label">Publications</p>
+    <h2 class="section-title">業績（主要論文）</h2>
+    <ul class="pub-list">
+      <li class="pub-item">
+        <span class="pub-year">2025</span>
+        <div>
+          <p class="pub-title">Generating Synthetic Journal‐Entry Data Using Variational Autoencoder</p>
+          <p class="pub-authors">R. Motai, S. Mashiko, Y. Kawamata, R. Shin, Y. Okada</p>
+          <p class="pub-venue">Intelligent Systems in Accounting, Finance and Management, 2025</p>
+        </div>
+      </li>
+      <li class="pub-item">
+        <span class="pub-year">2024</span>
+        <div>
+          <p class="pub-title">Estimating Bridge Natural Frequencies Based on Modal Analysis of Vehicle–Bridge Synchronized Vibration Data</p>
+          <p class="pub-authors">E. Mudahemuka, M. Miyagi, R. Shin, N. Kaneko, Y. Okada, K. Yamamoto</p>
+          <p class="pub-venue">Sensors, 2024</p>
+        </div>
+      </li>
+      <li class="pub-item">
+        <span class="pub-year">2023</span>
+        <div>
+          <p class="pub-title">Numerical Verification of the Drive-By Monitoring Method for Identifying Vehicle and Bridge Mechanical Parameters</p>
+          <p class="pub-authors">K. Yamamoto, R. Shin, E. Mudahemuka</p>
+          <p class="pub-venue">Applied Sciences, 13(5), 2023</p>
+        </div>
+      </li>
+      <li class="pub-item">
+        <span class="pub-year">2023</span>
+        <div>
+          <p class="pub-title">Practical Application of Drive-By Monitoring Technology to Road Roughness Estimation Using Buses in Service</p>
+          <p class="pub-authors">K. Yamamoto, R. Shin, K. Sakuma, M. Ono, Y. Okada</p>
+          <p class="pub-venue">Sensors, 23(4), 2023</p>
+        </div>
+      </li>
+      <li class="pub-item">
+        <span class="pub-year">2023</span>
+        <div>
+          <p class="pub-title">複数回走行時の車両振動データを用いた VBI システム同定の適用性に関する数値的検討</p>
+          <p class="pub-authors">塚田健人, 秦涼太, 山本亨輔</p>
+          <p class="pub-venue">土木学会論文集, 79(15), 2023</p>
+        </div>
+      </li>
+      <li class="pub-item">
+        <span class="pub-year">2023</span>
+        <div>
+          <p class="pub-title">Discussion on a Vehicle–Bridge Interaction System Identification in a Field Test</p>
+          <p class="pub-authors">R. Shin, Y. Okada, K. Yamamoto</p>
+          <p class="pub-venue">Sensors, 23(1), 2023</p>
+        </div>
+      </li>
+      <li class="pub-item">
+        <span class="pub-year">2022</span>
+        <div>
+          <p class="pub-title">Application of C-LSTM Networks to Automatic Labeling of Vehicle Dynamic Response Data for Bridges</p>
+          <p class="pub-authors">R. Shin, Y. Okada, K. Yamamoto</p>
+          <p class="pub-venue">Sensors, 22(9), 2022</p>
+        </div>
+      </li>
+      <li class="pub-item">
+        <span class="pub-year">2022</span>
+        <div>
+          <p class="pub-title">移動センシングを用いたシステム同定におけるパラメータ推定精度の数値的検討</p>
+          <p class="pub-authors">秦涼太, 岡田幸彦, 山本亨輔</p>
+          <p class="pub-venue">構造工学論文集 A, 68A, 298–309, 2022</p>
+        </div>
+      </li>
+    </ul>
+    <a class="pub-more" href="https://researchmap.jp/RyotaShin/published_papers" target="_blank" rel="noopener">すべての業績を見る（researchmap）→</a>
+  </div>
+</section>
+
+<section id="news">
+  <div class="section-inner reveal">
+    <p class="section-label">News</p>
+    <h2 class="section-title">お知らせ・活動報告</h2>
+    <ul class="news-list">
+      <li class="news-item">
+        <span class="news-date">2025.02.16</span>
+        <p class="news-text">
+          <span class="news-badge badge-event">発表</span>
+          第4回計算社会科学会大会にて「非財務情報のテキストマイニングによる会計不正検知」を発表しました。
+        </p>
+      </li>
+      <li class="news-item">
+        <span class="news-date">2025.02.03</span>
+        <p class="news-text">
+          <span class="news-badge badge-event">イベント</span>
+          <a href="http://www.mi.u-tokyo.ac.jp/consortium/block_kanto.html" target="_blank" rel="noopener">数理・データサイエンス教育強化拠点コンソーシアム 関東ブロック会議</a>に参加しました。
+        </p>
+      </li>
+      <li class="news-item">
+        <span class="news-date">2025.01.28</span>
+        <p class="news-text">
+          <span class="news-badge badge-info">お知らせ</span>
+          研究室ホームページを作成しました。
+        </p>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section id="access">
+  <div class="section-inner reveal">
+    <p class="section-label">Access</p>
+    <h2 class="section-title">アクセス・連絡先</h2>
+    <div class="access-grid">
+      <div>
+        <div class="access-info">
+          <h3>Contact</h3>
+          <div class="access-row">
+            <span class="access-label">所属</span>
+            <span class="access-value">東京理科大学 経営学部 経営学科</span>
+          </div>
+          <div class="access-row">
+            <span class="access-label">教員</span>
+            <span class="access-value">秦 涼太（助教）</span>
+          </div>
+          <div class="access-row">
+            <span class="access-label">E-mail</span>
+            <span class="access-value"><a href="mailto:shin.ryota.sp@alumni.tsukuba.ac.jp">shin.ryota.sp@alumni.tsukuba.ac.jp</a></span>
+          </div>
+        </div>
+        <div class="access-sns">
+          <h3>SNS</h3>
+          <div class="sns-links">
+            <a class="sns-link" href="https://x.com/shin_frog" target="_blank" rel="noopener">X (Twitter)</a>
+            <a class="sns-link" href="https://www.facebook.com/shin.ryota.3" target="_blank" rel="noopener">Facebook</a>
+            <a class="sns-link" href="https://researchmap.jp/RyotaShin" target="_blank" rel="noopener">researchmap</a>
+            <a class="sns-link" href="https://scholar.google.com/citations?user=Cr0DeoUAAAAJ&hl=ja" target="_blank" rel="noopener">Google Scholar</a>
+          </div>
+        </div>
+      </div>
+      <div class="access-map">
+        <!-- Google Mapsの埋め込みURLを設定してください -->
+        <p style="text-align:center; padding: 2rem;">
+          Google Maps 埋め込み<br>
+          <span style="font-size: 0.75rem; color: var(--text-muted);">iframe の src を実際のURLに差し替え</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p class="footer-name">SHIN Lab.</p>
+  <p>&copy; 2025 秦研究室, 東京理科大学 経営学部 — All rights reserved.</p>
+  <p style="margin-top: 0.5rem; font-size: 0.7rem;">
+    Illustrations: <a href="https://chojugiga.com/" target="_blank" rel="noopener">鳥獣戯画制作キット</a>
+  </p>
+</footer>
+
+<script>
+  const header = document.getElementById('header');
+  window.addEventListener('scroll', () => header.classList.toggle('scrolled', window.scrollY > 10));
+
+  const toggle = document.getElementById('navToggle');
+  const links = document.getElementById('navLinks');
+  toggle.addEventListener('click', () => links.classList.toggle('open'));
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
+
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
