@@ -301,6 +301,39 @@
     padding: 0.16rem 0.48rem; border-radius: 999px;
     letter-spacing: 0.02em; white-space: nowrap;
   }
+  .pub-explainer {
+    margin: 0.55rem 0 0.55rem;
+  }
+  .pub-explainer summary {
+    display: inline-flex; align-items: center; gap: 0.45rem;
+    cursor: pointer;
+    font-size: 0.72rem; font-weight: 600;
+    color: var(--accent-mid); background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 999px; padding: 0.32rem 0.78rem;
+    list-style: none; transition: 0.25s ease;
+    white-space: nowrap;
+  }
+  .pub-explainer summary::-webkit-details-marker { display: none; }
+  .pub-explainer summary::after {
+    content: '+'; font-family: 'Source Code Pro', monospace;
+    font-size: 0.82rem; line-height: 1;
+  }
+  .pub-explainer[open] summary::after { content: '-'; }
+  .pub-explainer summary:hover {
+    border-color: var(--accent-light); color: var(--accent);
+    background: var(--blue-bg);
+  }
+  .pub-simple-desc {
+    margin-top: 0.65rem;
+    padding: 0.8rem 0.95rem;
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.78rem; color: var(--text-light); line-height: 1.85;
+    line-break: strict; overflow-wrap: break-word;
+    text-wrap: pretty;
+    text-align: justify; text-align-last: left; text-justify: inter-character;
+  }
   .pub-venue {
     font-size: 0.76rem; font-style: italic; color: var(--text-muted);
     line-break: strict; overflow-wrap: break-word;
@@ -1263,6 +1296,52 @@
         publicationTagLookup.get(title).push(tag);
       });
     });
+    const publicationSummaryMap = {
+      'Generating synthetic journal-entry data using variational autoencoder': '会計の仕訳データをAIで人工的に作り、少ない実データでも学習や分析に使えるようにする研究です。',
+      'Estimating bridge natural frequencies based on modal analysis of vehicle–bridge synchronized vibration data': '車と橋を同時に測った振動データから、橋がどんな速さで揺れやすいかを車側から推定する方法を調べた研究です。',
+      'Numerical verification of the drive-by monitoring method for identifying vehicle and bridge mechanical parameters': '車の振動から橋と車の特徴をどこまで正しく推定できるかを、計算機シミュレーションで確かめた研究です。',
+      'Practical application of drive-by monitoring technology to road roughness estimation using buses in service': '営業運行中のバスの振動から道路の凸凹を調べ、路面状態の点検に役立てる方法を実際のデータで試した研究です。',
+      '複数回走行時の車両振動データを用いたVBIシステム同定の適用性に関する数値的検討': '同じ橋を何度も走ったときの車の振動を使って、橋と車の性質をより安定して推定できるかを調べた研究です。',
+      'Discussion on a vehicle–bridge interaction system identification in a field test': '実際の橋で行った計測実験をもとに、車と橋が影響し合う仕組みを現場データから見分けられるかを議論した研究です。',
+      '財務諸表データを用いた資金ニーズの見過ごしチェックAIの開発': '企業の決算情報から、お金が本当に必要なのに見逃されそうな会社をAIで見つける方法を考えた研究です。',
+      'Application of C-LSTM networks to automatic labelling of vehicle dynamic response data for bridges': '橋を走る車の振動データに自動で意味のあるラベルを付け、後の分析をしやすくするAI手法を提案した研究です。',
+      '移動センシングを用いたシステム同定におけるパラメータ推定精度の数値的検討': '走る車で橋を調べるとき、どの条件なら橋や車の特徴を正しく求めやすいかを計算で調べた研究です。',
+      'Noise reduced common PCA for high-dimensional low-sample size multi-view data': '少ないデータでも、複数の情報源に共通する大事な特徴を見つけやすくする統計手法を改良した研究です。',
+      'Data-driven approaches to detecting misdeliveries in truck logistics using GPS data': 'トラックのGPSデータから、荷物の誤配送が起きた可能性をデータだけで見つける方法を考えた研究です。',
+      'The analysis for the acceleration data of vehicle running on over 100 bridges based on SSMA': '100を超える橋を走った車の加速度データをまとめて分析し、橋の違いや共通点を見つけようとした研究です。',
+      'Field study of drive-by monitoring for estimating road unevenness with buses in service operation': '実際に走るバスのデータを使って、道路の凸凹を走行中に見積もる方法が現場で使えるかを確かめた研究です。',
+      'Parametric study of the vehicle-bridge interaction system identification method': '車と橋の性質の違いが推定結果にどう影響するかを、条件を変えながら詳しく調べた研究です。',
+      'Numerical verification of vehicle-bridge interaction system identification method using 3D models': '橋をより現実に近い3次元モデルで表し、そのときでも推定方法がうまく働くかを確かめた研究です。',
+      'The possibility of data integration of drive-by monitoring and direct bridge monitoring': '車から見る橋の情報と、橋に直接付けたセンサの情報を組み合わせると、点検がもっと良くなるかを考えた研究です。',
+      'Applicable schemes for the vehicle-bridge interaction system identification method': '車と橋の特徴を推定する方法について、どんなやり方が使いやすく効果的かを比較した研究です。',
+      'The application of the SVD-FDD hybrid method to bridge mode shape estimation': '橋の揺れ方の形をより正確に調べるために、2つの信号処理法を組み合わせた方法を試した研究です。',
+      'The behavior analysis of spatial singular mode angle due to addition of noise to data in an actual bridge experiment': '実験データにノイズが入ると分析結果がどう変わるかを調べ、信号の乱れに強い見方を考えた研究です。',
+      'Numerical studies on bridge inspection using data obtained from sensors on vehicle': '車に付けたセンサのデータだけで橋の点検がどこまでできるかを、数値計算で調べた研究です。',
+      'The validation of sensor on-vehicle for evaluation of actual bridges with signal processing': '車載センサと信号処理を使って、実際の橋の状態を評価できるかを確かめた研究です。',
+      'SVD法を用いる鋼製橋梁模型の交通振動データの特異値分解': '鋼の橋の模型で得た振動データを分解して、どんな揺れが隠れているかを見つけようとした研究発表です。',
+      '対話型AIサービスにおける信頼の転換 — 言語スタイル模倣によるシステム信頼から対人信頼への置き換え効果の検証': '人がAIを信頼するとき、AIの話し方が自分に似ていると「機械への信頼」が「相手への信頼」に変わるかを調べた研究です。',
+      '2次元Hermite族要素による非線形システムの数値シミュレーション': '複雑な非線形現象を計算で再現するために、2次元の特殊な関数を使ったシミュレーション方法を扱った研究発表です。',
+      '非財務情報のテキストマイニングによる会計不正検知': '数字だけでなく文章情報も分析して、会計の不正が起きていそうな会社を見つける方法を考えた研究です。',
+      '実測データによる車両橋梁相互作用システム同定法: 松見橋における事例': '松見橋で実際に測ったデータを使い、車と橋の関係を現場データから読み解けるかを試した研究発表です。',
+      'トラック隊列走行による車間距離の違いが橋梁振動に及ぼす影響': 'トラックが続けて橋を渡るとき、車同士の間隔で橋の揺れ方がどう変わるかを調べた研究発表です。',
+      '損傷前後における鋼製模型橋梁の動的特性の変化に関する実験的検討': '橋の模型に傷を入れる前後で揺れ方がどう変わるかを比べ、損傷検出につなげようとした研究発表です。',
+      '車両振動ベースの橋梁状態推定に及ぼすGPS精度の影響': '車の振動から橋の状態を推定するとき、GPSの位置精度がどれだけ大切かを調べた研究発表です。',
+      'Social Infrastructure Service Level Agreementによる道路インフラのサービス評価': '道路インフラの良し悪しを、利用者にどんなサービスを提供できているかという視点で評価しようとした研究です。',
+      'データドリブンなインフラ点検に向けたドライブバイモニタリング': '走る車のデータを使ってインフラ点検を効率化する考え方を紹介した研究発表です。',
+      '車両・橋梁同時計測のためのGPS時刻同期型振動計測システムの開発': '車と橋の振動を同じ時刻で正確に比べられるよう、GPSで時刻をそろえる計測システムを作った研究発表です。',
+      '複数車両を用いるVBIシステム同定のパラメータ更新方法に関する数値的検討': '複数の車を使って橋を調べるとき、データをどう更新すると推定が良くなるかを調べた研究発表です。',
+      '車両による間接的構造物健全性モニタリングにおける車両速度の数値的検証': '車の速さが違うと橋の状態をどれくらいうまく読み取れるかを調べた研究発表です。',
+      'COFOGによる自治体財政可視化プラットフォーム構築のための事例研究': '自治体のお金の使い道をわかりやすく見せる仕組みを作るための事例研究です。',
+      'データコラボレーション解析のクロスサイロ実験：筑波大学附属病院とつくば市の実データを用いて': '病院と市役所のように別々に持たれているデータを安全に組み合わせ、地域課題に生かす方法を試した研究です。',
+      'Vehicle-Bridge Interaction System: An extension of 1D to 3D model for bridge design and maintenance': '橋の設計や点検に使うため、車と橋の関係を1次元より現実に近い3次元で表す方法を考えた研究発表です。',
+      '異なる車両モデルがVBIシステム同定の推定精度に与える影響の数値的検証': '車のモデルの置き方が違うと、橋や車の特徴を求める結果がどう変わるかを調べた研究発表です。',
+      '財務諸表は長期借入金の増加予測に資するのか？': '企業の決算書を見れば、将来長期の借入れが増えそうかを予測できるかを調べた研究発表です。',
+      '橋梁振動を用いたVBIシステム同定における有効性の数値的検討': '橋そのものの振動データを使うと、車と橋の関係をどこまで正しく推定できるかを調べた研究発表です。',
+      '車載センサから得られた3軸加速度データの補正法に関する提案': '車のセンサが測る3方向の揺れデータを、より正しく使えるよう補正する方法を提案した研究発表です。',
+      '移動センシングを用いたシステム同定において計測ノイズが車両パラメータの推定精度に及ぼす影響の数値的検討': '測定に混ざる雑音があると、車の特徴を求める結果がどれだけ悪くなるかを調べた研究発表です。',
+      '車両振動データから橋梁検出を行うためのGPS情報利用に関する検証': '車の振動データだけでは分かりにくい「今橋の上にいるか」を、GPSを使って見分ける方法を検証した研究発表です。',
+      'Applications of Bayesian network models in predicting disease onset for health insurance service': '保険や健康支援に役立てるため、病気が起こりそうかを確率モデルで予測する方法を研究した発表です。'
+    };
     const years = [...new Set(
       pubItems
         .map((item) => Number.parseInt(item.querySelector('.pub-year')?.textContent ?? '', 10))
@@ -1288,6 +1367,29 @@
       });
 
       authors.insertAdjacentElement('afterend', tagList);
+    });
+
+    pubItems.forEach((item) => {
+      const title = item.querySelector('.pub-title')?.textContent?.trim();
+      const authors = item.querySelector('.pub-authors');
+      if (!title || !authors || item.querySelector('.pub-explainer')) return;
+
+      const simpleSummary = publicationSummaryMap[title];
+      if (!simpleSummary) return;
+
+      const explainer = document.createElement('details');
+      explainer.className = 'pub-explainer';
+
+      const summaryButton = document.createElement('summary');
+      summaryButton.textContent = '簡単な説明';
+
+      const summaryBody = document.createElement('p');
+      summaryBody.className = 'pub-simple-desc';
+      summaryBody.textContent = simpleSummary;
+
+      explainer.append(summaryButton, summaryBody);
+      const anchor = item.querySelector('.pub-tags') ?? authors;
+      anchor.insertAdjacentElement('afterend', explainer);
     });
 
     const updateSubsectionVisibility = () => {
