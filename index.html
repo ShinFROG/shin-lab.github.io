@@ -380,7 +380,25 @@
   .role-pi { background: var(--amber-bg); color: var(--gold); }
   .role-co { background: var(--blue-bg); color: var(--accent-mid); }
 
-  #lectures { background: var(--paper); }
+  #awards { background: var(--paper); }
+  .award-list { list-style: none; }
+  .award-item {
+    padding: 1.3rem 0; border-bottom: 1px solid var(--border);
+    display: grid; grid-template-columns: 64px 1fr; gap: 1rem; align-items: start;
+  }
+  .award-item:last-child { border-bottom: none; }
+  .award-year {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 0.85rem; font-weight: 500; color: var(--gold); padding-top: 0.1rem;
+  }
+  .award-title {
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 600; font-size: 0.9rem;
+    color: var(--ink); margin-bottom: 0.25rem; line-height: 1.6;
+  }
+  .award-detail { font-size: 0.78rem; color: var(--text-light); line-height: 1.8; }
+
+  #lectures { background: var(--paper-warm); }
   .lecture-table {
     width: 100%; border-collapse: collapse;
     background: var(--white); border: 1px solid var(--border); border-radius: 6px;
@@ -535,6 +553,7 @@
       <li><a href="#research">Research</a></li>
       <li><a href="#publications">Publications</a></li>
       <li><a href="#funding">Funding</a></li>
+      <li><a href="#awards">Awards</a></li>
       <li><a href="#lectures">Lectures</a></li>
       <li><a href="#news">News</a></li>
       <li><a href="#access">Access</a></li>
@@ -594,6 +613,14 @@
         <div class="faculty-row">
           <span class="faculty-label">E-mail</span>
           <span class="faculty-value"><a href="mailto:shin.ryota.sp@alumni.tsukuba.ac.jp">shin.ryota.sp@alumni.tsukuba.ac.jp</a></span>
+        </div>
+        <div class="faculty-row" style="margin-top:0.8rem;">
+          <span class="faculty-label">経歴</span>
+          <span class="faculty-value">
+            2025.04– 東京理科大学 経営学部 経営学科 助教<br>
+            2022–2024 日本学術振興会 特別研究員（DC2）<br>
+            2024.03 筑波大学大学院 理工情報生命学術院 博士後期課程修了
+          </span>
         </div>
         <div class="faculty-links">
           <a class="faculty-link" href="https://researchmap.jp/RyotaShin" target="_blank" rel="noopener">researchmap</a>
@@ -856,6 +883,14 @@
       <li class="pub-item">
         <span class="pub-year">2025</span>
         <div>
+          <p class="pub-title">走行車両と橋梁の同時振動計測に基づく橋梁の現有性能推定</p>
+          <p class="pub-authors">*田口由得・宮城昌竜・秦涼太・山本亨輔</p>
+          <p class="pub-venue">令和7年度土木学会全国大会 第80回年次学術講演会, 熊本.</p>
+        </div>
+      </li>
+      <li class="pub-item">
+        <span class="pub-year">2025</span>
+        <div>
           <p class="pub-title">2次元Hermite族要素による非線形システムの数値シミュレーション</p>
           <p class="pub-authors">山本亨輔・李祺・孫睿玲・酒井智礼・秦涼太</p>
           <p class="pub-venue">第28回応用力学シンポジウム, 京都大学.</p>
@@ -1057,6 +1092,23 @@
   </div>
 </section>
 
+<section id="awards">
+  <div class="section-inner reveal">
+    <p class="section-label">Awards</p>
+    <h2 class="section-title">受賞</h2>
+    <ul class="award-list">
+      <li class="award-item">
+        <span class="award-year">2025</span>
+        <div>
+          <p class="award-title">令和7年度 土木学会全国大会 第80回年次学術講演会 優秀講演者</p>
+          <p class="award-detail">受賞者：田口由得（筑波大学・指導学生）</p>
+          <p class="award-detail">発表題目：「走行車両と橋梁の同時振動計測に基づく橋梁の現有性能推定」</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
+
 <section id="lectures">
   <div class="section-inner reveal">
     <p class="section-label">Lectures</p>
@@ -1179,7 +1231,7 @@
 <footer>
   <p class="footer-name">SHIN Lab.</p>
   <p>&copy; 2026 秦研究室, 東京理科大学 経営学部 — All rights reserved.</p>
-  <p style="margin-top: 0.45rem; font-size: 0.72rem;">最終更新日: 2026年3月19日</p>
+  <p style="margin-top: 0.45rem; font-size: 0.72rem;">最終更新日: 2026年3月24日</p>
   <p style="margin-top: 0.5rem; font-size: 0.7rem;">
     Illustrations: <a href="https://chojugiga.com/" target="_blank" rel="noopener">鳥獣戯画制作キット</a>
   </p>
@@ -1237,6 +1289,7 @@
         'Vehicle-Bridge Interaction System: An extension of 1D to 3D model for bridge design and maintenance',
         '異なる車両モデルがVBIシステム同定の推定精度に与える影響の数値的検証',
         '橋梁振動を用いたVBIシステム同定における有効性の数値的検討',
+        '走行車両と橋梁の同時振動計測に基づく橋梁の現有性能推定',
         'SVD法を用いる鋼製橋梁模型の交通振動データの特異値分解',
         '車載センサから得られた3軸加速度データの補正法に関する提案',
         '移動センシングを用いたシステム同定において計測ノイズが車両パラメータの推定精度に及ぼす影響の数値的検討',
@@ -1318,6 +1371,7 @@
       'The behavior analysis of spatial singular mode angle due to addition of noise to data in an actual bridge experiment': '実橋実験データにノイズを加えたとき、空間特異モード角がどう変化するかを分析した研究です。',
       'Numerical studies on bridge inspection using data obtained from sensors on vehicle': '車載センサから得たデータだけで橋梁点検に使える情報をどこまで得られるかを、数値計算で検討した研究です。',
       'The validation of sensor on-vehicle for evaluation of actual bridges with signal processing': '車載センサのデータに信号処理を施し、実橋評価に使えるかを検証した研究です。',
+      '走行車両と橋梁の同時振動計測に基づく橋梁の現有性能推定': '走行車両と橋梁の振動を同時に計測し、そのデータから橋梁の現有性能を推定する方法を検討した研究発表です。',
       'SVD法を用いる鋼製橋梁模型の交通振動データの特異値分解': '鋼製橋梁模型の交通振動データを SVD で分解し、主要な振動成分を捉えようとした研究発表です。',
       '対話型AIサービスにおける信頼の転換 — 言語スタイル模倣による対人信頼からシステム信頼への置き換え効果の検証': '対話型AIが利用者の言語スタイルを模倣すると、対人的な信頼がシステムへの信頼に置き換わるかを検証した研究です。',
       '2次元Hermite族要素による非線形システムの数値シミュレーション': '2次元 Hermite 族要素を用いて、非線形システムを数値シミュレーションする方法を扱った研究発表です。',
