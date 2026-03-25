@@ -289,9 +289,12 @@
     font-size: 0.78rem; color: var(--text-light); margin-bottom: 0.15rem;
     line-break: strict; overflow-wrap: break-word;
   }
-  .pub-tags {
-    display: flex; flex-wrap: wrap; gap: 0.38rem;
+  .pub-actions {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem;
     margin: 0.4rem 0 0.45rem;
+  }
+  .pub-tags {
+    display: contents;
   }
   .pub-tag {
     display: inline-flex; align-items: center;
@@ -302,7 +305,7 @@
     letter-spacing: 0.02em; white-space: nowrap;
   }
   .pub-explainer {
-    margin: 0.55rem 0 0.55rem;
+    margin: 0;
   }
   .pub-explainer summary {
     display: inline-flex; align-items: center; gap: 0.45rem;
@@ -324,6 +327,9 @@
     border-color: var(--accent-light); color: var(--accent);
     background: var(--blue-bg);
   }
+  .pub-explainer[open], .pub-cite[open] {
+    flex-basis: 100%;
+  }
   .pub-simple-desc {
     margin-top: 0.65rem;
     padding: 0.8rem 0.95rem;
@@ -333,6 +339,60 @@
     line-break: strict; overflow-wrap: break-word;
     text-wrap: pretty;
     text-align: justify; text-align-last: left; text-justify: inter-character;
+  }
+  .pub-cite {
+    margin: 0;
+  }
+  .pub-cite summary {
+    display: inline-flex; align-items: center; gap: 0.45rem;
+    cursor: pointer;
+    font-size: 0.72rem; font-weight: 600;
+    color: var(--accent-mid); background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 999px; padding: 0.32rem 0.78rem;
+    list-style: none; transition: 0.25s ease;
+    white-space: nowrap;
+  }
+  .pub-cite summary::-webkit-details-marker { display: none; }
+  .pub-cite summary::after {
+    content: '+'; font-family: 'Source Code Pro', monospace;
+    font-size: 0.82rem; line-height: 1;
+  }
+  .pub-cite[open] summary::after { content: '-'; }
+  .pub-cite summary:hover {
+    border-color: var(--accent-light); color: var(--accent);
+    background: var(--blue-bg);
+  }
+  .pub-cite-body {
+    display: flex; align-items: flex-start; gap: 0.6rem;
+    margin-top: 0.65rem;
+    padding: 0.8rem 0.95rem;
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 6px;
+  }
+  .pub-cite-text {
+    flex: 1; min-width: 0;
+    font-size: 0.78rem; color: var(--text-light); line-height: 1.85;
+    line-break: strict; overflow-wrap: break-word;
+    font-family: 'Source Code Pro', monospace;
+    user-select: all;
+  }
+  .pub-cite-copy {
+    flex-shrink: 0;
+    appearance: none; border: 1px solid var(--border);
+    background: var(--paper); color: var(--text-light);
+    font-size: 0.7rem; font-weight: 600;
+    padding: 0.35rem 0.65rem; border-radius: 4px;
+    cursor: pointer; transition: 0.25s ease;
+    white-space: nowrap;
+  }
+  .pub-cite-copy:hover {
+    border-color: var(--accent-light); color: var(--accent);
+    background: var(--blue-bg);
+  }
+  .pub-cite-copy.copied {
+    border-color: var(--green); color: var(--green);
+    background: var(--green-bg);
   }
   .pub-venue {
     font-size: 0.76rem; font-style: italic; color: var(--text-muted);
@@ -1445,6 +1505,71 @@
       explainer.append(summaryButton, summaryBody);
       const anchor = item.querySelector('.pub-tags') ?? authors;
       anchor.insertAdjacentElement('afterend', explainer);
+    });
+
+    pubItems.forEach((item) => {
+      const title = item.querySelector('.pub-title')?.textContent?.trim();
+      const authorsEl = item.querySelector('.pub-authors');
+      const venueEl = item.querySelector('.pub-venue');
+      const yearEl = item.querySelector('.pub-year');
+      if (!title || !authorsEl || !venueEl || !yearEl) return;
+
+      const authors = authorsEl.textContent.trim();
+      const year = yearEl.textContent.trim();
+      const venue = venueEl.textContent.trim();
+      const doiEl = item.querySelector('.pub-doi a');
+      const doiUrl = doiEl ? doiEl.href : '';
+
+      const apa = `${authors} (${year}). ${title}. ${venue}${doiUrl ? ' ' + doiUrl : ''}`;
+
+      const details = document.createElement('details');
+      details.className = 'pub-cite';
+
+      const summary = document.createElement('summary');
+      summary.textContent = 'Cite (APA)';
+
+      const body = document.createElement('div');
+      body.className = 'pub-cite-body';
+
+      const text = document.createElement('span');
+      text.className = 'pub-cite-text';
+      text.textContent = apa;
+
+      const copyBtn = document.createElement('button');
+      copyBtn.type = 'button';
+      copyBtn.className = 'pub-cite-copy';
+      copyBtn.textContent = 'Copy';
+      copyBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(apa).then(() => {
+          copyBtn.textContent = 'Copied!';
+          copyBtn.classList.add('copied');
+          setTimeout(() => {
+            copyBtn.textContent = 'Copy';
+            copyBtn.classList.remove('copied');
+          }, 2000);
+        });
+      });
+
+      body.append(text, copyBtn);
+      details.append(summary, body);
+
+      const anchor = item.querySelector('.pub-explainer') ?? item.querySelector('.pub-tags') ?? authorsEl;
+      anchor.insertAdjacentElement('afterend', details);
+    });
+
+    pubItems.forEach((item) => {
+      const tags = item.querySelector('.pub-tags');
+      const explainer = item.querySelector('.pub-explainer');
+      const cite = item.querySelector('.pub-cite');
+      if (!tags && !explainer && !cite) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'pub-actions';
+      const first = tags || explainer || cite;
+      first.parentNode.insertBefore(wrapper, first);
+      if (tags) wrapper.appendChild(tags);
+      if (explainer) wrapper.appendChild(explainer);
+      if (cite) wrapper.appendChild(cite);
     });
 
     const updateSubsectionVisibility = () => {
