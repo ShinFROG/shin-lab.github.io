@@ -929,6 +929,38 @@
       <li class="pub-item">
         <span class="pub-year">2026</span>
         <div>
+          <p class="pub-title">FDD法を用いた交通振動データに基づく橋梁模型のモード特性および損傷評価</p>
+          <p class="pub-authors">浅野凉弥・秦涼太・山本亨輔</p>
+          <p class="pub-venue">土木学会全国大会 第81回年次学術講演会, I-271, 札幌.</p>
+        </div>
+      </li>
+      <li class="pub-item">
+        <span class="pub-year">2026</span>
+        <div>
+          <p class="pub-title">車輪脱落後のタイヤ挙動シミュレーションのためのHermite型有限要素法の開発</p>
+          <p class="pub-authors">澤原菜々子・秦涼太・山本亨輔</p>
+          <p class="pub-venue">土木学会全国大会 第81回年次学術講演会, I-371, 札幌.</p>
+        </div>
+      </li>
+      <li class="pub-item">
+        <span class="pub-year">2026</span>
+        <div>
+          <p class="pub-title">GNSS時刻同期に基づく車両－橋梁IMU同時計測システムの構築と現場適用性の検証</p>
+          <p class="pub-authors">鹿屋覚・勝山俊平・秦涼太・髙橋悠太・山本亨輔</p>
+          <p class="pub-venue">土木学会全国大会 第81回年次学術講演会, I-508, 札幌.</p>
+        </div>
+      </li>
+      <li class="pub-item">
+        <span class="pub-year">2026</span>
+        <div>
+          <p class="pub-title">ディスクモデルを導入する車両−橋梁相互作用システム同定法の基礎検討</p>
+          <p class="pub-authors">秦涼太・山本亨輔</p>
+          <p class="pub-venue">土木学会全国大会 第81回年次学術講演会, I-509, 札幌.</p>
+        </div>
+      </li>
+      <li class="pub-item">
+        <span class="pub-year">2026</span>
+        <div>
           <p class="pub-title">Drive-by Monitoringのための不可観測カルマンフィルタの安定化と端部損傷検知</p>
           <p class="pub-authors">秦涼太・勝山俊平・山本亨輔</p>
           <p class="pub-venue">第29回応用力学シンポジウム, 東京大学.</p>
@@ -1370,6 +1402,9 @@
     const pubButtons = Array.from(publications.querySelectorAll('.pub-filter-button'));
     const publicationTagGroups = {
       'インフラモニタリング': [
+        'FDD法を用いた交通振動データに基づく橋梁模型のモード特性および損傷評価',
+        'GNSS時刻同期に基づく車両－橋梁IMU同時計測システムの構築と現場適用性の検証',
+        'ディスクモデルを導入する車両−橋梁相互作用システム同定法の基礎検討',
         'Estimating bridge natural frequencies based on modal analysis of vehicle–bridge synchronized vibration data',
         'Numerical verification of the drive-by monitoring method for identifying vehicle and bridge mechanical parameters',
         'Practical application of drive-by monitoring technology to road roughness estimation using buses in service',
@@ -1412,6 +1447,9 @@
         'COFOGによる自治体財政可視化プラットフォーム構築のための事例研究'
       ],
       'AI・計算手法': [
+        'FDD法を用いた交通振動データに基づく橋梁模型のモード特性および損傷評価',
+        '車輪脱落後のタイヤ挙動シミュレーションのためのHermite型有限要素法の開発',
+        'ディスクモデルを導入する車両−橋梁相互作用システム同定法の基礎検討',
         'Generating synthetic journal-entry data using variational autoencoder',
         'Estimating bridge natural frequencies based on modal analysis of vehicle–bridge synchronized vibration data',
         'Numerical verification of the drive-by monitoring method for identifying vehicle and bridge mechanical parameters',
@@ -1461,6 +1499,10 @@
       });
     });
     const publicationSummaryMap = {
+      'FDD法を用いた交通振動データに基づく橋梁模型のモード特性および損傷評価': '交通による振動データを FDD 法で解析し、橋梁模型の振動特性と損傷を評価する研究発表です。',
+      '車輪脱落後のタイヤ挙動シミュレーションのためのHermite型有限要素法の開発': '車輪脱落後のタイヤの動きをシミュレーションするため、Hermite 型有限要素法を開発する研究発表です。',
+      'GNSS時刻同期に基づく車両－橋梁IMU同時計測システムの構築と現場適用性の検証': 'GNSS による時刻同期を使って車両と橋梁の IMU データを同時に計測するシステムを構築し、現場での適用性を検証する研究発表です。',
+      'ディスクモデルを導入する車両−橋梁相互作用システム同定法の基礎検討': '車両と橋梁の相互作用を扱うシステム同定法にディスクモデルを導入するための基礎的な検討を行う研究発表です。',
       'Generating synthetic journal-entry data using variational autoencoder': '会計の仕訳データを変分オートエンコーダで人工生成する研究です。実データの特徴を保った疑似データづくりを目指しています。',
       'Estimating bridge natural frequencies based on modal analysis of vehicle–bridge synchronized vibration data': '車両と橋梁を同期計測した振動データをモーダル解析し、橋の固有振動数を推定する研究です。',
       'Numerical verification of the drive-by monitoring method for identifying vehicle and bridge mechanical parameters': '走行車両の応答から車両と橋梁の力学パラメータを同定する drive-by monitoring を、数値計算で検証した研究です。',
