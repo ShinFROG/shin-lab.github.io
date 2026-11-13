@@ -924,6 +924,37 @@
       </li>
     </ul>
 
+    <h3 style="font-family:'Noto Serif JP',serif; font-size:1.05rem; color:var(--ink); margin:2.5rem 0 1rem; padding-bottom:0.5rem; border-bottom:1px solid var(--border);">プレプリント / Preprints</h3>
+    <ul class="pub-list">
+      <li class="pub-item">
+        <span class="pub-year">2026</span>
+        <div>
+          <p class="pub-title">Are workplace tolerance and individual autonomy associated with work engagement? —Mediation analyses with psychological safety and intrinsic motivation</p>
+          <p class="pub-authors">Ono, T., Shin, R., Tamura, A., Okada, Y., Costantini, H., &amp; Nihei, M.</p>
+          <p class="pub-venue">PsyArXiv.</p>
+          <p class="pub-doi">doi=<a href="https://doi.org/10.31234/osf.io/bu7jp" target="_blank" rel="noopener">10.31234/osf.io/bu7jp</a></p>
+        </div>
+      </li>
+      <li class="pub-item">
+        <span class="pub-year">2026</span>
+        <div>
+          <p class="pub-title">Development and validation of a practical scale distinguishing between the richness of strong and weak ties</p>
+          <p class="pub-authors">Ono, T., Sugawara, I., Gen, A., Shin, R., Okada, Y., &amp; Nihei, M.</p>
+          <p class="pub-venue">Research Square.</p>
+          <p class="pub-doi">doi=<a href="https://doi.org/10.21203/rs.3.rs-9776217/v1" target="_blank" rel="noopener">10.21203/rs.3.rs-9776217/v1</a></p>
+        </div>
+      </li>
+      <li class="pub-item">
+        <span class="pub-year">2022</span>
+        <div>
+          <p class="pub-title">Application of particle swarm optimization method to on-going monitoring for estimating vehicle-bridge interaction system</p>
+          <p class="pub-authors">Yamamoto, K., Murakami, K., Shin, R., &amp; Okada, Y.</p>
+          <p class="pub-venue">arXiv.</p>
+          <p class="pub-doi">doi=<a href="https://doi.org/10.48550/arXiv.2201.08014" target="_blank" rel="noopener">10.48550/arXiv.2201.08014</a></p>
+        </div>
+      </li>
+    </ul>
+
     <h3 style="font-family:'Noto Serif JP',serif; font-size:1.05rem; color:var(--ink); margin:2.5rem 0 1rem; padding-bottom:0.5rem; border-bottom:1px solid var(--border);">学会発表 / Conference Presentations</h3>
     <ul class="pub-list">
       <li class="pub-item">
@@ -1427,6 +1458,7 @@
     const pubButtons = Array.from(publications.querySelectorAll('.pub-filter-button'));
     const publicationTagGroups = {
       'インフラモニタリング': [
+        'Application of particle swarm optimization method to on-going monitoring for estimating vehicle-bridge interaction system',
         'FDD法を用いた交通振動データに基づく橋梁模型のモード特性および損傷評価',
         'GNSS時刻同期に基づく車両－橋梁IMU同時計測システムの構築と現場適用性の検証',
         'ディスクモデルを導入する車両−橋梁相互作用システム同定法の基礎検討',
@@ -1472,6 +1504,7 @@
         'COFOGによる自治体財政可視化プラットフォーム構築のための事例研究'
       ],
       'AI・計算手法': [
+        'Application of particle swarm optimization method to on-going monitoring for estimating vehicle-bridge interaction system',
         'FDD法を用いた交通振動データに基づく橋梁模型のモード特性および損傷評価',
         '車輪脱落後のタイヤ挙動シミュレーションのためのHermite型有限要素法の開発',
         'ディスクモデルを導入する車両−橋梁相互作用システム同定法の基礎検討',
@@ -1506,6 +1539,8 @@
         '財務諸表は長期借入金の増加予測に資するのか？'
       ],
       'コミュニティ包摂性評価': [
+        'Are workplace tolerance and individual autonomy associated with work engagement? —Mediation analyses with psychological safety and intrinsic motivation',
+        'Development and validation of a practical scale distinguishing between the richness of strong and weak ties',
         'データコラボレーション解析のクロスサイロ実験：筑波大学附属病院とつくば市の実データを用いて',
         'Applications of Bayesian network models in predicting disease onset for health insurance service'
       ],
@@ -1524,6 +1559,9 @@
       });
     });
     const publicationSummaryMap = {
+      'Are workplace tolerance and individual autonomy associated with work engagement? —Mediation analyses with psychological safety and intrinsic motivation': '日本の働く人1,084人を4回にわたって調べたデータで、職場の寛容さと個人の自律性がワーク・エンゲイジメントとどう関係するかを、心理的安全性と内発的動機づけを通る経路に分けて分析した研究です。',
+      'Development and validation of a practical scale distinguishing between the richness of strong and weak ties': '身近な人との強いつながりと、知り合い程度の弱いつながりの豊かさを分けて測る6問の質問紙尺度を開発し、妥当性と信頼性を確かめた研究です。',
+      'Application of particle swarm optimization method to on-going monitoring for estimating vehicle-bridge interaction system': '車両の振動と位置のデータだけから、車両と橋梁の力学パラメータと路面の凹凸を粒子群最適化（PSO）で推定する方法を提案し、数値実験で検証した研究です。',
       'FDD法を用いた交通振動データに基づく橋梁模型のモード特性および損傷評価': '交通による振動データを FDD 法で解析し、橋梁模型の振動特性と損傷を評価する研究発表です。',
       '車輪脱落後のタイヤ挙動シミュレーションのためのHermite型有限要素法の開発': '車輪脱落後のタイヤの動きをシミュレーションするため、Hermite 型有限要素法を開発する研究発表です。',
       'GNSS時刻同期に基づく車両－橋梁IMU同時計測システムの構築と現場適用性の検証': 'GNSS による時刻同期を使って車両と橋梁の IMU データを同時に計測するシステムを構築し、現場での適用性を検証する研究発表です。',
