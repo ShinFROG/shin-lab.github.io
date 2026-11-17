@@ -80,12 +80,13 @@ footer { margin-top: 1em; color: var(--sub); font-size: 0.82em; }
   <details>
     <summary>このページについて</summary>
     <p>もとにしたもの：Weizenbaum, J. (1966). ELIZA—A computer program for the study of natural language communication between man and machine. <i>Communications of the ACM</i>, 9(1), 36–45. の付録にある台本（DOCTOR）。キーワード・順位・型と、返事の順を、日本語に訳しました。</p>
+    <p>キーワードが無い文には、決まり文句を順に返します。前に聞いた「私の〜」の話は、1966年のプログラムと同じく、4回に1回の順番のときだけ持ち出します。</p>
     <p>日本語にするために、英語の台本に無い決まりを足しました。</p>
     <ul>
       <li>返事に写すあなたの文は、「です・ます」の形を返事の文に合わせて直します。</li>
       <li>「私」を「あなた」に、「あなた」を「私」に替えます。</li>
       <li>「母」「父」などに「私の」が無いときは、「私の」を補います。</li>
-      <li>気持ち・望み・できないことを言う文は、「私は」が無くても、「私は」があるものとして読みます。</li>
+      <li>主語の無い文は、「私は」があるものとして読みます（問いの文は「あなたは」）。ほかの人や天気のことを言う文、あいさつやお礼には補いません。</li>
       <li>文は「。」「？」「！」で区切り、読点「、」では区切りません。</li>
       <li>「AI」「人工知能」「ロボット」なども、「コンピュータ」「機械」の仲間に入れました。</li>
       <li>「死にたい」「消えたい」など命にかかわる言葉には、型で答えず、人に相談するよう案内します（安全のために足した決まり）。</li>
@@ -110,10 +111,15 @@ footer { margin-top: 1em; color: var(--sub); font-size: 0.82em; }
      (1) 返事に写す文の終わりの形（です・ます）を、返事の文に合わせて直す
      (2) 「私・僕・わたし」などを「あなた」に、「あなた・君・ELIZA」などを「私」に替える（英語の台本の I = YOU、YOU = I）
      (3) 家族の語（母・父など）に「私の」が無いときは補う（日本語では「私の母」の「私の」を省くことが多いため）
-     (4) 気持ち・望み・できないこと・感じたことを言う文は、「私は」が無くても「私は」があるものとして扱う（日本語では主語を省くことが多いため）
+     (4) 主語の無い文は、「私は…」の文として読む（英語の台本では、ほとんどの文に I が入る。日本語では「私は」を省くのがふつうなので、入力の訳し方として補う）。
+         ただし、ほかの人や物が主語の文（彼は・雨が・今日は雨です など）、あいさつ・お礼・あいづち、気持ちの語でない1語だけの文には補わない。
+         主語の無い問い（〜？・〜か）は、相手（ELIZA）のことを聞いているものとして「あなたは…」を補う
      (5) 文は「。」「？」「！」で区切り、読点「、」では区切らない（英語の台本は読点でも区切った）
      (6) 「私は〜ですか」「あなたは〜ですか」「〜できますか」の問いは、英語の語順（AM I / ARE YOU / CAN I）に合わせて、文の頭にキーワードがあるものとして扱う
      (7) 「AI・人工知能・ロボット・パソコン」も、COMPUTER（コンピュータ・機械）の仲間に入れる
+   原典（MAD-SLIP の ELIZA。Anthony Hay の写しの eliza.cpp）に合わせたこと：
+     ・覚えた話は、文が来るたびに 1→2→3→4→1… と回る数（LIMIT）が 4 のときだけ持ち出す（論文の「a certain counting mechanism」）
+     ・覚えた話の型（4つ）は、文の最後の語で選ぶ（原典は最後の語のハッシュ。日本語では最後の字の番号を4で割った余り）
    安全のために足した決まり（1966年の台本には無い）：
      (8) 「死にたい」「消えたい」など命にかかわる言葉には、型で答えず、人に相談するよう決まった案内を返す
    文の意味は何も処理しない。打った文は、この画面の中だけで扱い、どこにも送らない。 */
@@ -227,6 +233,9 @@ footer { margin-top: 1em; color: var(--sub); font-size: 0.82em; }
   function toPlain(s0) {
     var s = trimTail(s0);
     s = s.replace(/(ます|です|でしょう|ません|ました|でした|ない|る|た|い|だ)(?:か|かな|かしら|\?)$/, '$1').replace(/[?]$/, '');
+    // 頼む言い方（〜てください・〜てくれ・〜て）は「〜てほしい」にする（「話を聞いてください」→「話を聞いてほしい」）
+    s = s.replace(/(て|で)(?:ください|下さい|くれる|くれ|ちょうだい|もらえる|もらえますか|くれますか|くれない|くれませんか)$/, '$1ほしい');
+    if (/[^っ](て|で)$/.test(s) && !/(初めて|はじめて|すべて|全て|改めて|決して|せめて|あえて|かつて|やがて|とても|まして)$/.test(s)) s = s + 'ほしい';
     s = s.replace(/な(?:の|ん)(?:です|だ)$/, 'だ');
     s = s.replace(/(?:の|ん)です$/, '').replace(/のだ$/, '');
     var m;
@@ -301,12 +310,16 @@ footer { margin-top: 1em; color: var(--sub); font-size: 0.82em; }
     return p.slice(0, -2) + 'る';
   }
 
+  // 文の頭の「〇〇は」を「〇〇が」にする（「こと」「〜のか」の中に入れるとき）
+  function gaTopic(x) { return x.replace(/^([^はがをにでともへや、,\uE001\uE002]{1,12}?)は(?![いあ])/, '$1が'); }
   // ───────── 返事に写す部分（スロット）の形
   var F = {
     raw: function (x) { return trimTail(x); },
     plain: function (x) { return toPlain(x); },
     no: function (x) { var p = toPlain(x), k = kind(p); return k === 'cop' ? p.slice(0, -1) + 'なの' : (k === 'noun' ? p + 'なの' : p + 'の'); },
     koto: function (x) { var p = toPlain(x), k = kind(p); return k === 'cop' ? p.slice(0, -1) + 'であること' : (k === 'noun' ? p + 'であること' : p + 'こと'); },
+    kotoga: function (x) { return F.koto(gaTopic(x)); },
+    noga: function (x) { return F.no(gaTopic(x)); },
     to: function (x) { var p = toPlain(x); return kind(p) === 'noun' ? p + 'だ' : p; },
     kara: function (x) { var p = toPlain(x); return kind(p) === 'noun' ? p + 'だから' : p + 'から'; },
     ka: function (x) { return base(toPlain(x)); },
@@ -382,7 +395,7 @@ footer { margin-top: 1em; color: var(--sub); font-size: 0.82em; }
   ];
   var BELIEF = '(?:思|おも|考え|かんがえ|信じ|しんじ|感じ|かんじ|願|ねが|気がし|気がす)';
   var FEEL_RE = /(.*?)(感じ|かんじ|気がし|気がす)/;
-  var QWORD = /何|なに|なん[でだの]|どう|なぜ|いつ(?!も)|どこ|誰|だれ|どんな|どれ/;
+  var QWORD = /何|なに|なん[でだの]|どう|なぜ|いつ(?!も)|どこ|誰|だれ|どんな|どれ|は\?$/;
   var Q_END = /(ですか|でしょうか|ますか|ませんか|のか|か|かな|かしら|の|\?)$/;
 
   // ───────── 文を読む前の置き換え
@@ -398,7 +411,35 @@ footer { margin-top: 1em; color: var(--sub); font-size: 0.82em; }
       var i = fm.index, prev = t.slice(Math.max(0, i - 1), i);
       if (prev !== 'の' && prev !== I && prev !== Y) t = t.slice(0, i) + Y + 'の' + t.slice(i);
     }
-    return t;
+    return implicitSubject(t);
+  }
+  // 主語の無い文に「私は」（問いは「あなたは」）を補う（日本語にするために足した決まりの (4)）
+  var YESNO_HEAD = /^(はい|うん|ええ|いいえ|いや|ううん|いえ|違|ちが|そう(?:です|だ|ね|よ)?$|もちろん|確かに|たしかに|こんにちは|こんにちわ|こんばんは|こんばんわ|おはよう|はじめまして|初めまして|やあ|ハロー|ごめん|すみません|すいません)/;
+  var SET_END = /(ありがとう(ございます|ございました)?|どうも|さようなら|さよなら|バイバイ|じゃあね|またね|おやすみ(なさい)?|よろしく(お願いします|おねがいします)?|お疲れ(様|さま)?(です|でした)?|おつかれ|なるほど|そうか|そっか|そうですか|そうなんだ|そうなんですね|へえ|へー|ふーん|もういい(です|よ)?|いいよ|了解(です)?|OK|ok|オッケー)$/;
+  var OTHER_SUBJ = /(彼ら|彼女ら|彼女たち|あの人たち|あいつら|人たち|人々|彼女|彼|あの人|あいつ|みんな|皆|誰|だれ|友達|友だち|友人|先生|上司|先輩|後輩|同級生|クラスメート|恋人|彼氏|それ|これ|あれ|そっち|こっち|天気|雨|雪|風|空|世界|社会|日本|政治|ニュース|テレビ|ネット|猫|犬|AI|機械|コンピュータ|ロボット|ChatGPT)(?:は|が|って|も)(?!(?:少な|多[いく]|いな|いる|いま|ある|あり|ない|なく|でき|ほし|欲し|好き|嫌い|きらい|苦手|得意|怖|こわ|心配|不安|大変|必要|分から|わから|分かる|わかる|気にな))/;
+  var WEATHER_END = /(雨|晴れ|曇り|くもり|雪|台風)(です|だ|でした|だった)?$/;
+  var EMO1 = /^(?:(?:眠|ねむ|寂し|さみし|さびし|悲し|かなし|つら|辛|しんど|だる|怖|こわ|痛|いた|苦し|くるし|嬉し|うれし|楽し|たのし|忙し|いそがし|寒|さむ|暑|あつ|恥ずかし|はずかし|悔し|くやし|むなし|虚し|せつな|切な|眠た|めんどくさ|面倒くさ)(?:い|かった|くない|くなかった)|(?:不安|心配|幸せ|しあわせ|暇|ひま|退屈|たいくつ|元気|げんき|大変|たいへん|憂うつ|憂鬱|ゆううつ|不幸せ)|(?:疲れた|つかれた|疲れました|疲れています|疲れてる|お腹すいた|おなかすいた|お腹がすいた|腹減った|眠れない|ねむれない|落ち込んでいる|落ち込んでる|へこんでる))(?:です|だ|でした|だった|ね|よ)?$/;
+  var PERSON_END = /(生|年生|学生|大学生|高校生|社会人|大人|子ども|子供|人間|日本人|男|女|一人っ子|長男|長女|次男|次女|末っ子|新人|初心者|ファン|オタク|者|員)$/;
+  var OBJ_PRED = /(好き|嫌い|きらい|欲し|ほし|怖|こわ|心配|苦手|得意|分か|わか|必要|大切|大事|うらやまし)/;
+  var ADV = /^(最近|さいきん|このごろ|この頃|近ごろ|今日は|今日|きょうは|きょう|昨日は|昨日|毎日|いつも|ちょっと|少し|すこし|とても|すごく|めっちゃ|かなり|本当に|ほんとに|もう|まだ|なんか|なんだか)[、,]?/;
+  var LEAD = /^((?:でも|だけど|けど|それに|それで|そして|まあ|うーん|えっと|あの|ただ|実は|じつは)[、,]?)/;
+  var IMPLIED = null;   // 補った主語（{at: 位置, who: 'Y' か 'I'}）。キーワードの順では、書かれた語より後ろに置く
+  function implicitSubject(t) {
+    IMPLIED = null;
+    var b = trimTail2(t);
+    if (!b || SET_END.test(b) || YESNO_HEAD.test(b)) return t;
+    var subj = /(\uE001|\uE002)(?:は|って|も|には|では)/.test(t) || (/(\uE001|\uE002)が/.test(t) && !OBJ_PRED.test(t.slice(t.search(/(\uE001|\uE002)が/))));
+    if (subj) return t;
+    var lead = (t.match(LEAD) || [''])[0], body = t.slice(lead.length);
+    if (/(\?|ですか|ますか|ませんか|でしょうか|のか|んか|ないか|るか|たか|いか|だか|かな|かしら)$/.test(b)) { IMPLIED = { at: lead.length, who: 'I' }; return lead + I + 'は' + body; }   // 主語の無い問いは、相手（ELIZA）のことを聞いている
+    if ((OTHER_SUBJ.test(t) && !/(て|で)(くれ|もらえ|もらっ)/.test(t)) || WEATHER_END.test(b)) return t;
+    var b2 = b.replace(/(です|でした|でしょう|だ|だった)$/, '');
+    if (/(たち|達)$/.test(b2)) return t;                                   // 「いじめっ子たちです」（人の集まりを言う語だけの文）
+    // 助詞の無い短い文は、動詞で終わる文、気持ちや体の調子の語、自分の立場を言う語（〜生など）のときだけ補う（「本当です」「ばか」「うるさい」には補わない）
+    var verbEnd = /(ます|ました|ません|ませんでした|ている|ています|てる|てた|ていた|ない|なかった|たい|たかった|れる|られる|せる|させる|[^いし]た|[うくぐすつぬぶむ])$/.test(b2) && b2.length >= 3;
+    if (!/[がをにでとへもは、,]/.test(b2.replace(/でき/g, '')) && !verbEnd && !EMO1.test(b.replace(ADV, '')) && !PERSON_END.test(b2)) return t;
+    IMPLIED = { at: lead.length, who: 'Y' };
+    return lead + Y + 'は' + body;
   }
   function show(s) {
     s = s.split(Y).join('あなた').split(I).join('私');
@@ -426,14 +467,14 @@ footer { margin-top: 1em; color: var(--sub); font-size: 0.82em; }
   K('REMEMBER', 5, rx(/覚えて|おぼえて|思い出|思いだ|おもいだ/), [
     D('私は X を覚えている', function (t) {
       if (t.indexOf(I) >= 0) return null;
-      var m = t.match(/^(?:.*?\uE001(?:は|が|も)?[、,]?)?(.+?)(?:のこと)?(?:を|は|も)(?:よく|まだ|今でも|いまでも|ずっと|はっきり)?(?:覚えて|おぼえて|思い出|思いだ|おもいだ)/);
+      var m = t.match(/^(?:.*?\uE001(?:は|が|も)?[、,]?)?(.+?)(?:のこと)?(?:を|は|も)?(?:よく|まだ|今でも|いまでも|ずっと|はっきり)?(?:覚えて|おぼえて|思い出|思いだ|おもいだ)/);
       if (!m) return null;
       var x = m[1].replace(/^[、,\s]+/, '').replace(/(のこと|こと)$/, '');
       return x ? { X: x } : null;
     }, ['{X:raw}のことを、よく考えるのですか。', '{X:raw}のことを考えると、ほかに何か思い浮かびますか。', 'ほかに、何を覚えていますか。',
       'なぜ今、{X:raw}のことを思い出したのですか。', '今の状況の何が、{X:raw}のことを思い出させるのですか。', '私と{X:raw}のあいだに、どんなつながりがありますか。']),
     D('あなたは X を覚えているか', function (t) {
-      var m = t.match(/\uE002(?:は|って|も)?[、,]?(.+?)(?:のこと)?(?:を|は)(?:覚えて|おぼえて)(?:いますか|いるか|いる\?|る\?|ますか|いる？)/);
+      var m = t.match(/\uE002(?:は|って|も)?[、,]?(.+?)(?:のこと)?(?:を|は)?(?:覚えて|おぼえて)(?:いますか|いるか|いる|ますか|ます|る|るか)?(?:か|の|\?)+$/);
       return m ? { X: m[1].replace(/(のこと|こと)$/, '') } : null;
     }, ['私が{X:raw}のことを忘れると思ったのですか。', 'なぜ、私が今{X:raw}のことを思い出すべきだと思うのですか。', '{X:raw}のことが、どうかしましたか。', '=WHAT', '{X:raw}のことを話しましたね。']),
     D('（ほかの文）', function () { return {}; }, ['NEWKEY'])
@@ -458,7 +499,7 @@ footer { margin-top: 1em; color: var(--sub); font-size: 0.82em; }
     D('（夢の文）', function () { return {}; }, ['その夢は、あなたに何を伝えていると思いますか。', 'よく夢を見ますか。', 'あなたの夢には、どんな人が出てきますか。',
       'その夢は、あなたの悩みと何か関係がある、とは思いませんか。', 'NEWKEY'])
   ]);
-  function rxq(re) { return function (t) { var m = t.match(re); return m ? { pos: -1, surf: m[0] } : null; }; }
+  function rxq(re) { return function (t) { var m = t.match(re); return m ? { pos: -1, surf: m[0] === 'は?' ? '〜は？' : m[0] } : null; }; }
   K('HOW', 0, rxq(/どうやって|どのように|どうすれば|どうしたら|どうなる|どう思|どう考|どうです|どうでしょう/), [D('（問い）', function () { return {}; }, ['=WHAT'])]);
   K('WHEN', 0, rxq(/いつ(?!も|か|まで|の間|でも)/), [D('（問い）', function () { return {}; }, ['=WHAT'])]);
   K('ALIKE', 10, rx(/同じ|おなじ|似て|似た|似る|そっくり/), [D('（似ている）', function () { return {}; }, ['=DIT'])]);
@@ -552,13 +593,15 @@ footer { margin-top: 1em; color: var(--sub); font-size: 0.82em; }
       'もし{X:raw}がずっと得られなかったら、どうしますか。', '{X:raw}が得られることは、あなたにとって何を意味しますか。', '{X:raw}をほしいと思うことは、この話とどう関係するのですか。'], { implicit: true }),
     D('私は X したい', function (t, imp) {
       if (!subjOK(t, imp)) return null;
-      var m = t.match(/(?:\uE001(?:は|が|も)?[、,]?)?([^\uE001\uE002]+?)たい(?:です|んです|のです|と思|と考え|けど|けれど|な|なあ|ね|よ|。|$)/);
+      var m = t.match(/\uE001(?:は|が|も|には)[、,]?(.+?)たい(?:です|んです|のです|と思|と考え|けど|けれど|な|なあ|ね|よ|。|$)/) ||
+        t.match(/(?:^|[、,\s])([^\uE001\uE002]+?)たい(?:です|んです|のです|と思|と考え|けど|けれど|な|なあ|ね|よ|。|$)/);
       if (!m) return null;
       var x = m[1].replace(/^[、,\s]+/, '');
       if (!x || /(なり|あり)$/.test(x) && x.length < 3) return null;
-      return { X: x };
-    }, ['もし{X:stemdict}ことができたら、あなたにとってどんな意味がありますか。', 'なぜ{X:raw}たいのですか。', 'もうすぐ{X:stemdict}ことができるとしたら、どうですか。',
-      'もし、ずっと{X:stemdict}ことができなかったら、どうしますか。', '{X:stemdict}ことは、あなたにとって何を意味しますか。', '{X:raw}たいと思うことは、この話とどう関係するのですか。'], { implicit: true }),
+      // 「〜がしたい」の「が」は、「〜ことができたら」に写すときは「を」にする（「ゲームがしたい」→「ゲームをすることができたら」）
+      return { X: x, XD: x.replace(/が([^がをにでとはも、,\uE001\uE002]{1,4})$/, 'を$1') };
+    }, ['もし{XD:stemdict}ことができたら、あなたにとってどんな意味がありますか。', 'なぜ{X:raw}たいのですか。', 'もうすぐ{XD:stemdict}ことができるとしたら、どうですか。',
+      'もし、ずっと{XD:stemdict}ことができなかったら、どうしますか。', '{XD:stemdict}ことは、あなたにとって何を意味しますか。', '{X:raw}たいと思うことは、この話とどう関係するのですか。'], { implicit: true }),
     D('私は … 悲しい・不幸せ・憂うつ・病気 …', function (t, imp) {
       if (!subjOK(t, imp)) return null;
       for (var k = 0; k < SAD.length; k++) {
@@ -586,11 +629,12 @@ footer { margin-top: 1em; color: var(--sub); font-size: 0.82em; }
       if (!m) return null;
       var x = trimTail(m[1]);
       if (x.indexOf(I) >= 0 || !predARE.test(x) || verbOnly(x)) return null;
+      if (/ない(です)?$/.test(x) && !/([がはもで]ない|くない|(少|すく|危|あぶ|切|せつ|情け|なさけ|仕方|しかた|しょうが|申し訳|もったい|くだら|あっけ|そっけ|頼り|たより)ない)(です)?$/.test(x)) return null;   // 動詞の打ち消しは「私は X ない」の型で
       return { X: x };
     }, ['{X:kara}、私のところに来たのですか。', 'いつから{X:no}ですか。', '{X:no}は、ふつうのことだと思いますか。', '{X:no}を、楽しんでいますか。']),
     D('私は X できない', function (t, imp) {
       if (!subjOK(t, imp)) return null;
-      var m = t.match(/(?:\uE001(?:は|が|も|には)?[、,]?)?([^\uE001\uE002]*?)(でき|出来|られ|れ|書け|行け|話せ|読め|言え|会え|歩け|泳げ|遊べ|待て|使え|買え|思え|笑え|聞け|休め|頼め|選べ|勝て|歌え|帰れ|眠れ|寝れ|起きられ|食べられ|来られ|続けられ|決められ)(?:ない|ません|なかった|ませんでした|ず)/);
+      var m = t.match(/(?:\uE001(?:は|が|も|には)?[、,]?)?(.*?)(でき|出来|られ|れ|書け|行け|話せ|読め|言え|会え|歩け|泳げ|遊べ|待て|使え|買え|思え|笑え|聞け|休め|頼め|選べ|勝て|歌え|帰れ|眠れ|寝れ|起きられ|食べられ|来られ|続けられ|決められ)(?:ない|ません|なかった|ませんでした|ず)/);
       if (!m) return null;
       var pre = m[1].replace(/^[、,\s]+/, '').replace(/^(最近|さいきん|このごろ|この頃|近ごろ|今日は|きょうは|昨日は|今は|いまは)[、,]?/, ''), c = m[2];
       if ((c === 'れ' || c === 'られ') && !pre) return null;
@@ -655,10 +699,10 @@ footer { margin-top: 1em; color: var(--sub); font-size: 0.82em; }
     D('私の X', function (t) {
       var m = t.match(/\uE001の(?!こと)(.+)$/);
       return m ? { X: m[1] } : null;
-    }, ['あなたの{X:no}ですね。', 'なぜ、あなたの{X:to}と言うのですか。', 'そのことから、あなたにかかわるほかの何かが思い浮かびますか。', 'あなたの{X:koto}は、あなたにとって大事なことですか。'], { mem: true })
+    }, ['あなたの{X:no}ですね。', 'なぜ、あなたの{X:to}と言うのですか。', 'そのことから、あなたにかかわるほかの何かが思い浮かびますか。', 'あなたの{X:kotoga}は、あなたにとって大事なことですか。'], { mem: true })
   ], '私の');
   // CAN：「〜できますか」（英語の CAN I / CAN YOU ... は文の頭に CAN が来るので、文の頭にあるものとして扱う）
-  K('CAN', 0, function (t) { return (/(でき|出来|られ|れ)(?:ます|る)(?:か|\?|かな|の)$/.test(trimTail2(t)) && !QWORD.test(t)) ? { pos: -1, surf: '〜できますか' } : null; }, [
+  K('CAN', 0, function (t) { var b = trimTail2(t); return (/(でき|出来|られ|れ)(?:ます|る)(?:か|\?|かな|の)$/.test(b) && !/くれ(?:ます|る)(?:か|\?|かな|の)$/.test(b) && !QWORD.test(t)) ? { pos: -1, surf: '〜できますか' } : null; }, [
     D('あなたは X できますか', function (t) {
       var m = t.match(/\uE002(?:は|って|も|が|に)?[、,]?(.*?)(でき|出来|られ|れ)(?:ます|る)(?:か|\?|かな|の)$/);
       return m ? { X: m[1] + m[2] + 'る' } : null;
@@ -669,7 +713,7 @@ footer { margin-top: 1em; color: var(--sub); font-size: 0.82em; }
       return { X: m[1] + m[2] + 'る' };
     }, ['{X:raw}かどうかは、私よりも、あなたしだいです。', '{X:raw}ようになりたいのですか。', '本当は、{X:raw}ようになりたくないのかもしれませんね。', '=WHAT'])
   ], '〜できますか');
-  K('WHAT', 0, rxq(/何(?!か|も|と|度|回|人|個|歳|才|時|日|年|月|分|でも|事|気)|なに(?!か|も)|なん(?:です|だ|の|て)|どんな/), [
+  K('WHAT', 0, rxq(/何(?!か|も|と|度|回|人|個|歳|才|時|日|年|月|分|でも|事|気)|なに(?!か|も)|なん(?:です|だ|の|て)|どんな|は\?$/), [
     D('（問い）', function () { return {}; }, ['なぜ、それを聞くのですか。', 'その問いに、興味があるのですか。', '本当は、何が知りたいのですか。', 'そういう問いが、いつも気になっているのですか。',
       'どんな答えなら、いちばんうれしいですか。', 'あなたはどう思いますか。', 'それを聞くとき、何が頭に浮かびますか。', '前にも、そういうことを聞いたことがありますか。', 'ほかの誰かにも聞きましたか。'])
   ], '何・どんな');
@@ -709,7 +753,7 @@ footer { margin-top: 1em; color: var(--sub); font-size: 0.82em; }
   K('NONE', 0, function () { return null; }, [
     D('（キーワードなし）', function () { return {}; }, ['あなたの言うことが、よく分かったかどうか自信がありません。', '続けてください。', 'それは、あなたに何を思わせますか。', 'そういうことを話すのに、強い気持ちがありますか。'])
   ]);
-  var MEMORY = ['なぜあなたの{X:no}か、もっと話し合いましょう。', 'さっき、あなたの{X:to}と言いましたね。', 'でも、あなたの{X:no}ですよね。', 'それは、あなたの{X:koto}と、何か関係がありますか。'];
+  var MEMORY = ['なぜあなたの{X:noga}か、もっと話し合いましょう。', 'さっき、あなたの{X:to}と言いましたね。', 'でも、あなたの{X:no}ですよね。', 'それは、あなたの{X:kotoga}と、何か関係がありますか。'];
   var KEY_ORDER = ['SORRY', 'REMEMBER', 'IF', 'DREAMT', 'DREAM', 'HOW', 'WHEN', 'ALIKE', 'CERTAINLY', 'PERHAPS', 'NAME', 'XFREMD', 'HELLO', 'COMPUTER', 'AM', 'ARE', 'YOUR', 'WAS',
     'I', 'YOU', 'YES', 'NO', 'MY', 'CAN', 'WHAT', 'BECAUSE', 'WHY', 'EVERYONE', 'ALWAYS', 'LIKE'];
   var KEY_JA = { SORRY: 'ごめん・すみません', REMEMBER: '覚えて・思い出', IF: 'もし', DREAMT: '夢を見た', DREAM: '夢', HOW: 'どうやって・どう思う', WHEN: 'いつ', ALIKE: '同じ・似て',
@@ -739,7 +783,7 @@ footer { margin-top: 1em; color: var(--sub); font-size: 0.82em; }
   function ElizaJa(opt) { this.safeText = (opt && opt.safeText) || SAFE_TEXT; this.reset(); }
   ElizaJa.prototype.reset = function () {
     for (var k in SCRIPT) { SCRIPT[k].decs.forEach(function (d) { d.i = 0; }); }
-    this.memory = []; this.memCount = 0;
+    this.memory = []; this.limit = 1;
   };
   ElizaJa.prototype.greeting = function () { return 'はじめまして。あなたの悩みを聞かせてください。'; };
 
@@ -764,18 +808,18 @@ footer { margin-top: 1em; color: var(--sub); font-size: 0.82em; }
         }
         var text = fill(tpl, slots);
         if (text) {
-          if (d.mem && name === 'MY') this.remember(t);
           return { text: text, how: { key: name, keyJa: (implicit ? '（「私は」を補った）' : '') + (surf || KEY_JA[name]), rank: key.rank, rule: d.label, tpl: tplShow(tpl) } };
         }
       }
     }
     return null;
   };
+  // 覚えた話を作る（キーワード MY を使うとき。原典の create_memory）。型は、文の最後の字で選ぶ（原典は最後の語のハッシュ）
   ElizaJa.prototype.remember = function (t) {
     var m = t.match(/\uE001の(?!こと)(.+)$/);
     if (!m) return;
-    var tpl = MEMORY[this.memCount % MEMORY.length];
-    this.memCount++;
+    var b = trimTail2(t).replace(/[?]+$/, '');
+    var tpl = MEMORY[b.charCodeAt(b.length - 1) % MEMORY.length];
     var text = fill(tpl, { X: m[1] });
     if (text) { this.memory.push({ text: text, tpl: tplShow(tpl) }); if (this.memory.length > 10) this.memory.shift(); }
   };
@@ -784,6 +828,7 @@ footer { margin-top: 1em; color: var(--sub); font-size: 0.82em; }
     var raw = String(input || '').normalize ? String(input || '').normalize('NFKC') : String(input || '');
     raw = raw.replace(/\s+/g, ' ').trim();
     if (!raw) return null;
+    this.limit = this.limit % 4 + 1;   // 原典の LIMIT：文が来るたびに 1→2→3→4→1…
     if (SAFETY.test(raw)) return { text: this.safeText, how: { key: 'SAFETY', keyJa: '命にかかわる言葉', rank: null, rule: '安全のために足した決まり（1966年の台本には無い）', tpl: '型で答えず、人に相談するよう案内する' } };
     var sents = raw.split(/[。.!?\n]+/).map(function (s) { return s.trim(); }).filter(function (s) { return s; });
     if (/[?]\s*$/.test(raw) && sents.length) { sents[sents.length - 1] += '?'; }
@@ -796,6 +841,14 @@ footer { margin-top: 1em; color: var(--sub); font-size: 0.82em; }
         if (h) hits.push({ name: KEY_ORDER[k], pos: h.pos, surf: h.surf, rank: SCRIPT[KEY_ORDER[k]].rank, ord: k });
       }
       if (!hits.length) continue;
+      if (IMPLIED) {
+        // 補った主語は、あいさつ・副詞などの書かれたキーワードより後ろ、書かれた「私」「あなた」より前に置く（英語の語順で、主語は目的語より前）
+        var imp = hits.filter(function (h) { return h.pos === IMPLIED.at && ((h.name === 'I' && IMPLIED.who === 'Y') || (h.name === 'YOU' && IMPLIED.who === 'I')); })[0];
+        if (imp) {
+          var pr = hits.filter(function (h) { return h !== imp && /^(I|YOU|MY|YOUR)$/.test(h.name); }).map(function (h) { return h.pos; });
+          imp.pos = pr.length ? Math.min.apply(null, pr) - 0.5 : 1e9;
+        }
+      }
       hits.sort(function (a, b) { return a.pos - b.pos || a.ord - b.ord; });
       var stack = [];
       hits.forEach(function (h) { if (!stack.length || h.rank > stack[0].rank) stack.unshift(h); else stack.push(h); });
@@ -805,6 +858,7 @@ footer { margin-top: 1em; color: var(--sub); font-size: 0.82em; }
         if (stack[q].name === 'YOU') surf = 'あなた';
         if (stack[q].name === 'MY') surf = '私の';
         if (stack[q].name === 'YOUR') surf = 'あなたの';
+        if (stack[q].name === 'MY') this.remember(t);   // 原典：キーワード MY を使うとき、覚えた話を作る
         var r = this.tryKey(stack[q].name, t, 0, false, surf);
         if (r && r !== 'NEWKEY') return r;
       }
@@ -819,7 +873,7 @@ footer { margin-top: 1em; color: var(--sub); font-size: 0.82em; }
     return this.noKey();
   };
   ElizaJa.prototype.noKey = function () {
-    if (this.memory.length) {
+    if (this.limit === 4 && this.memory.length) {   // 原典：LIMIT が 4 のときだけ、覚えた話を持ち出す
       var m = this.memory.shift();
       return { text: m.text, how: { key: 'MEMORY', keyJa: '（キーワードなし）', rank: null, rule: '前に覚えた「私の〜」の話', tpl: m.tpl } };
     }
