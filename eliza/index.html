@@ -847,6 +847,7 @@ footer { margin-top: 1em; color: var(--sub); font-size: 0.82em; }
         if (imp) {
           var pr = hits.filter(function (h) { return h !== imp && /^(I|YOU|MY|YOUR)$/.test(h.name); }).map(function (h) { return h.pos; });
           imp.pos = pr.length ? Math.min.apply(null, pr) - 0.5 : 1e9;
+          imp.implied = true;
         }
       }
       hits.sort(function (a, b) { return a.pos - b.pos || a.ord - b.ord; });
@@ -856,6 +857,7 @@ footer { margin-top: 1em; color: var(--sub); font-size: 0.82em; }
         var surf = stack[q].surf;
         if (stack[q].name === 'I') surf = '私';
         if (stack[q].name === 'YOU') surf = 'あなた';
+        if (stack[q].implied) surf = stack[q].name === 'I' ? '（「私は」を補った）私' : '（「あなたは」を補った）あなた';
         if (stack[q].name === 'MY') surf = '私の';
         if (stack[q].name === 'YOUR') surf = 'あなたの';
         if (stack[q].name === 'MY') this.remember(t);   // 原典：キーワード MY を使うとき、覚えた話を作る
