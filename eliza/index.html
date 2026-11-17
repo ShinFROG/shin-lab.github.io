@@ -6,6 +6,7 @@
 <title>日本語のELIZA</title>
 <meta name="description" content="1966年の対話プログラムELIZAの台本を、日本語に訳して動かすページ。打った文は端末の中だけで扱い、どこにも送りません。">
 <meta name="robots" content="noindex">
+<link rel="icon" href="data:,">
 <style>
 :root {
   --bg: #f6f6f4; --card: #ffffff; --ink: #222222; --sub: #5f5f5f; --line: #d4d4d0;
@@ -87,11 +88,13 @@ footer { margin-top: 1em; color: var(--sub); font-size: 0.82em; }
       <li>気持ち・望み・できないことを言う文は、「私は」が無くても、「私は」があるものとして読みます。</li>
       <li>文は「。」「？」「！」で区切り、読点「、」では区切りません。</li>
       <li>「AI」「人工知能」「ロボット」なども、「コンピュータ」「機械」の仲間に入れました。</li>
+      <li>「死にたい」「消えたい」など命にかかわる言葉には、型で答えず、人に相談するよう案内します（安全のために足した決まり）。</li>
     </ul>
     <p>キーワードと、優先の順位（大きいほど先に使う）：</p>
     <div class="keys" id="keys"></div>
     <p>英語の元の形に近いELIZA：<a href="https://www.masswerk.at/elizabot/" target="_blank" rel="noopener">mass:werk の elizabot（英語）</a></p>
   </details>
+  <p class="privacy" id="help">つらいときは、身近な信頼できる人や、大学の学生相談室に話してください。電話やSNSで相談できる窓口は、厚生労働省の<a href="https://www.mhlw.go.jp/mamorouyokokoro/" target="_blank" rel="noopener">「まもろうよ こころ」</a>にまとめられています。</p>
   <footer>授業の体験のために作ったページです（2026年11月）。<a href="../">SHIN Lab.</a></footer>
 </main>
 <script>
@@ -111,6 +114,8 @@ footer { margin-top: 1em; color: var(--sub); font-size: 0.82em; }
      (5) 文は「。」「？」「！」で区切り、読点「、」では区切らない（英語の台本は読点でも区切った）
      (6) 「私は〜ですか」「あなたは〜ですか」「〜できますか」の問いは、英語の語順（AM I / ARE YOU / CAN I）に合わせて、文の頭にキーワードがあるものとして扱う
      (7) 「AI・人工知能・ロボット・パソコン」も、COMPUTER（コンピュータ・機械）の仲間に入れる
+   安全のために足した決まり（1966年の台本には無い）：
+     (8) 「死にたい」「消えたい」など命にかかわる言葉には、型で答えず、人に相談するよう決まった案内を返す
    文の意味は何も処理しない。打った文は、この画面の中だけで扱い、どこにも送らない。 */
 (function (root) {
   'use strict';
@@ -728,7 +733,10 @@ footer { margin-top: 1em; color: var(--sub); font-size: 0.82em; }
   }
   function tplShow(tpl) { return tpl.replace(/\{\??\w+(?:[:.]\w+)?\}/g, 'X'); }
 
-  function ElizaJa() { this.reset(); }
+  // 命にかかわる言葉（安全のために足した決まり）
+  var SAFETY = /死にたい|しにたい|死のう|死んでしまいたい|死んだほうが|死ぬしか|消えたい|きえたい|自殺|じさつ|生きていたくない|生きたくない|いなくなりたい|リスカ|リストカット|自分を傷つけ|自傷/;
+  var SAFE_TEXT = '打ち明けてくれて、ありがとうございます。私はプログラムなので、あなたの気持ちを本当には分かりません。身近な信頼できる人や、学生相談室に話してください。';
+  function ElizaJa(opt) { this.safeText = (opt && opt.safeText) || SAFE_TEXT; this.reset(); }
   ElizaJa.prototype.reset = function () {
     for (var k in SCRIPT) { SCRIPT[k].decs.forEach(function (d) { d.i = 0; }); }
     this.memory = []; this.memCount = 0;
@@ -776,6 +784,7 @@ footer { margin-top: 1em; color: var(--sub); font-size: 0.82em; }
     var raw = String(input || '').normalize ? String(input || '').normalize('NFKC') : String(input || '');
     raw = raw.replace(/\s+/g, ' ').trim();
     if (!raw) return null;
+    if (SAFETY.test(raw)) return { text: this.safeText, how: { key: 'SAFETY', keyJa: '命にかかわる言葉', rank: null, rule: '安全のために足した決まり（1966年の台本には無い）', tpl: '型で答えず、人に相談するよう案内する' } };
     var sents = raw.split(/[。.!?\n]+/).map(function (s) { return s.trim(); }).filter(function (s) { return s; });
     if (/[?]\s*$/.test(raw) && sents.length) { sents[sents.length - 1] += '?'; }
     // 1966年の論文：キーワードのある最初の文だけを使い、あとの文は捨てる。キーワードの無い文は捨てて次へ
@@ -831,7 +840,7 @@ footer { margin-top: 1em; color: var(--sub); font-size: 0.82em; }
 </script>
 <script>
 (function () {
-  var eliza = new window.ElizaJa();
+  var eliza = new window.ElizaJa({ safeText: '打ち明けてくれて、ありがとうございます。私はプログラムなので、あなたの気持ちを本当には分かりません。身近な信頼できる人や、学生相談室に話してください。相談できる窓口は、このページのいちばん下にあります。' });
   var log = document.getElementById('log'), inp = document.getElementById('inp'), btn = document.getElementById('send');
   var chat = document.getElementById('chat'), showHow = document.getElementById('showHow');
   var busy = false;
